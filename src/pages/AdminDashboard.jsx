@@ -319,7 +319,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-xl p-4 border shadow-sm">
             <h3 className="font-semibold text-gray-800 mb-4">Completion by Week</h3>
             <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={getAllWeeks().slice(0, 8).map(week => ({
+              <BarChart data={getAllWeeks().map(week => ({
                 name: week.id.replace('week-', 'W').replace('pre-work', 'Pre'),
                 completed: students.filter(s => s.progress?.some(p => p.week_id === week.id && p.completed)).length
               }))}>

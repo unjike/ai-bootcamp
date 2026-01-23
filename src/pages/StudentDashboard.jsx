@@ -182,32 +182,43 @@ export default function StudentDashboard() {
 
   // Time tracking - log every 5 minutes
   useEffect(() => {
+    if (!user) return;
+    
+    // Reset the timer when component mounts
+    lastLogRef.current = Date.now();
+    
     const interval = setInterval(async () => {
-      if (user) {
-        const now = Date.now();
-        const secondsSpent = Math.floor((now - lastLogRef.current) / 1000);
-        if (secondsSpent >= 60) {
-          await logTimeSpent(user.id, 'session', secondsSpent);
-          lastLogRef.current = now;
-          setTotalTime(prev => prev + secondsSpent);
-        }
+      const now = Date.now();
+      const secondsSpent = Math.floor((now - lastLogRef.current) / 1000);
+      
+      // Only log if between 60 seconds and 10 minutes (sanity check)
+      if (secondsSpent >= 60 && secondsSpent <= 600) {
+        await logTimeSpent(user.id, 'session', secondsSpent);
+        lastLogRef.current = now;
+        setTotalTime(prev => prev + secondsSpent);
+      } else {
+        // Reset if something went wrong
+        lastLogRef.current = now;
       }
-    }, 60000); // Check every minute
+    }, 300000); // Log every 5 minutes
 
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user?.id]);
 
-  // Log time on unmount
+  // Log time on unmount - with safeguards
   useEffect(() => {
+    if (!user) return;
+    
+    const userId = user.id;
+    
     return () => {
-      if (user) {
-        const secondsSpent = Math.floor((Date.now() - lastLogRef.current) / 1000);
-        if (secondsSpent > 10) {
-          logTimeSpent(user.id, 'session', secondsSpent);
-        }
+      const secondsSpent = Math.floor((Date.now() - lastLogRef.current) / 1000);
+      // Only log if reasonable (between 10 seconds and 10 minutes)
+      if (secondsSpent > 10 && secondsSpent < 600) {
+        logTimeSpent(userId, 'session', secondsSpent);
       }
     };
-  }, [user]);
+  }, [user?.id]);
 
   const loadProgress = async () => {
     const { data } = await getProgress(user.id);

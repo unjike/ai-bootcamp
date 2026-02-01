@@ -385,7 +385,7 @@ export default function StudentDashboard() {
                 <div>
                   <h3 className="font-semibold">Target Roles After Completion</h3>
                   <p className="text-sm opacity-90 mt-1">
-                    Junior Data Scientist ($88-110K) • Data Analyst ($57-75K) • Junior ML Analyst ($90-103K)
+                    Data Scientist • Data Analyst • ML Engineer • AI Specialist
                   </p>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Brain, Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Brain, Mail, Lock, User, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import { signIn, signUp, signInWithGoogle } from '../lib/supabase';
 
 export default function AuthPage() {
@@ -51,13 +51,19 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Back to Home */}
+        <Link to="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-emerald-600 mb-6 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm">Back to Home</span>
+        </Link>
+
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl mb-4">
             <Brain className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-800">AI Fundamentals Bootcamp</h1>
-          <p className="text-gray-500 mt-1">12-Week Curriculum</p>
+          <p className="text-gray-500 mt-1">12-Week Curriculum • v3.0</p>
         </div>
 
         {/* Auth Card */}
@@ -181,7 +187,7 @@ export default function AuthPage() {
 
         {/* Target roles */}
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Prepare for: Data Analyst • Data Scientist • ML Engineer • AI Specialist</p>
+          <p>Prepare for: Junior Data Scientist • ML Engineer • Data Analyst</p>
         </div>
       </div>
     </div>

@@ -181,7 +181,7 @@ export default function AuthPage() {
 
         {/* Target roles */}
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Prepare for: Junior Data Scientist • ML Engineer • Data Analyst</p>
+          <p>Prepare for: Data Analyst • Data Scientist • ML Engineer • AI Specialist</p>
         </div>
       </div>
     </div>

@@ -242,7 +242,7 @@ data = {
 }
 df = pd.DataFrame(data)
 
-print(f"Total Revenue: ${df['amount'].sum():,.2f}")
+print(f"Total Revenue: \${df['amount'].sum():,.2f}")
 
 # TODO: Write SQL-style queries using pandas
 # 1. Revenue by product category (GROUP BY)
@@ -265,7 +265,7 @@ data = {
 }
 df = pd.DataFrame(data)
 
-print(f"Total Revenue: ${df['amount'].sum():,.2f}")
+print(f"Total Revenue: \${df['amount'].sum():,.2f}")
 
 # 1. Revenue by category
 print("\\n=== REVENUE BY CATEGORY ===")
@@ -443,7 +443,7 @@ print(f"Random Forest AUC: {rf_auc:.3f}")
 print(f"\\nBusiness Impact:")
 print(f"Defaults in test: {y_test.sum()}")
 print(f"Cost per default: $9,000")
-print(f"Potential savings: ${int(y_test.sum() * 0.5 * 9000):,}")`
+print(f"Potential savings: \${int(y_test.sum() * 0.5 * 9000):,}")`
           }
         },
         {

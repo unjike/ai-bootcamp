@@ -192,3 +192,48 @@ export const isAdmin = async (userId) => {
   if (error) return false;
   return data?.role === 'admin';
 };
+
+// Quiz functions
+export const saveQuizResult = async (userId, quizId, weekId, score, passed, answers) => {
+  const { data, error } = await supabase
+    .from('quiz_results')
+    .upsert({
+      user_id: userId,
+      quiz_id: quizId,
+      week_id: weekId,
+      score: score,
+      passed: passed,
+      answers: answers,
+      completed_at: new Date().toISOString()
+    }, {
+      onConflict: 'user_id,quiz_id'
+    });
+  return { data, error };
+};
+
+export const getQuizResults = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from('quiz_results')
+      .select('*')
+      .eq('user_id', userId);
+    return { data: data || [], error };
+  } catch (err) {
+    console.error('getQuizResults exception:', err);
+    return { data: [], error: err };
+  }
+};
+
+export const getQuizResult = async (userId, quizId) => {
+  try {
+    const { data, error } = await supabase
+      .from('quiz_results')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('quiz_id', quizId)
+      .single();
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+};

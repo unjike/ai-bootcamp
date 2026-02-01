@@ -228,10 +228,10 @@ export default function LandingPage() {
           </div>
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { title: 'Junior Data Scientist', salary: '$88K - $110K', icon: BarChart3 },
+              { title: 'Data Scientist', salary: '$88K - $110K', icon: BarChart3 },
               { title: 'Data Analyst', salary: '$57K - $75K', icon: TrendingUp },
               { title: 'ML Engineer', salary: '$90K - $103K', icon: Cpu },
-              { title: 'AI/ML Engineer', salary: '$70K - $102K', icon: Brain },
+              { title: 'AI Specialist', salary: '$70K - $102K', icon: Brain },
             ].map((role, i) => (
               <div key={i} className="bg-white p-6 rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-lg transition-all text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl mb-4">

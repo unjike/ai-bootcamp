@@ -211,6 +211,7 @@ export default function LandingPage() {
             <SkillBadge icon={Database} label="TensorFlow/Keras" color="bg-red-100 text-red-700" />
             <SkillBadge icon={BarChart3} label="Data Visualization" color="bg-yellow-100 text-yellow-700" />
             <SkillBadge icon={Cpu} label="Neural Networks" color="bg-cyan-100 text-cyan-700" />
+            <SkillBadge icon={Database} label="Vector DBs (ChromaDB/Pinecone)" color="bg-violet-100 text-violet-700" />
             <SkillBadge icon={BookOpen} label="AI Ethics" color="bg-gray-100 text-gray-700" />
             <SkillBadge icon={Code} label="Git/GitHub" color="bg-gray-800 text-white" />
             <SkillBadge icon={Zap} label="Streamlit" color="bg-rose-100 text-rose-700" />

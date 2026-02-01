@@ -294,32 +294,50 @@ const WeekCard = ({
       
       {expanded && !isLocked && (
         <div className="px-4 pb-4 space-y-4">
-          {/* Sessions */}
-          <div>
-            <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-              <Target className="w-4 h-4" /> Live Sessions
-            </h4>
-            <ul className="space-y-1">
-              {week.sessions.map((session, i) => (
-                <li key={i} className="text-sm text-gray-600 pl-4 border-l-2 border-emerald-200">Session {i + 1}: {session}</li>
-              ))}
-            </ul>
-          </div>
+          {/* Sessions (for regular weeks) or Topics (for pre-work) */}
+          {week.sessions && week.sessions.length > 0 && (
+            <div>
+              <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <Target className="w-4 h-4" /> Live Sessions
+              </h4>
+              <ul className="space-y-1">
+                {week.sessions.map((session, i) => (
+                  <li key={i} className="text-sm text-gray-600 pl-4 border-l-2 border-emerald-200">Session {i + 1}: {session}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          {/* Topics (for pre-work) */}
+          {week.topics && week.topics.length > 0 && (
+            <div>
+              <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <Target className="w-4 h-4" /> Topics Covered
+              </h4>
+              <ul className="space-y-1">
+                {week.topics.map((topic, i) => (
+                  <li key={i} className="text-sm text-gray-600 pl-4 border-l-2 border-emerald-200">{topic}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           
           {/* Async Work */}
-          <div>
-            <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-              <Clock className="w-4 h-4" /> Async Work
-            </h4>
-            <ul className="space-y-1">
-              {week.asyncWork.map((task, i) => (
-                <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
-                  <span className="text-gray-400">•</span>
-                  <span className={task.includes('★') ? 'text-purple-600 font-medium' : ''}>{task}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {week.asyncWork && week.asyncWork.length > 0 && (
+            <div>
+              <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <Clock className="w-4 h-4" /> Async Work
+              </h4>
+              <ul className="space-y-1">
+                {week.asyncWork.map((task, i) => (
+                  <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
+                    <span className="text-gray-400">•</span>
+                    <span className={task.includes('★') ? 'text-purple-600 font-medium' : ''}>{task}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           
           {/* Resources */}
           <div>

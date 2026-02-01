@@ -29,6 +29,7 @@ const StudentRow = ({ student, onClick, isExpanded }) => {
   const progressPercent = Math.round((completedWeeks / totalWeeks) * 100);
   const totalTime = student.time_logs?.reduce((sum, log) => sum + log.seconds_spent, 0) || 0;
   const exercisesCompleted = new Set(student.exercise_attempts?.map(a => a.exercise_id)).size || 0;
+  const quizzesPassed = student.quiz_results?.filter(q => q.passed).length || 0;
   
   const getStatusColor = () => {
     if (progressPercent >= 75) return 'text-emerald-600 bg-emerald-100';
@@ -60,6 +61,7 @@ const StudentRow = ({ student, onClick, isExpanded }) => {
       </td>
       <td className="px-4 py-3 text-sm text-gray-600">{completedWeeks}/{totalWeeks} weeks</td>
       <td className="px-4 py-3 text-sm text-gray-600">{formatTime(totalTime)}</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{quizzesPassed}/{totalWeeks} passed</td>
       <td className="px-4 py-3 text-sm text-gray-600">{exercisesCompleted} done</td>
       <td className="px-4 py-3 text-sm text-gray-500">{formatDate(student.created_at)}</td>
       <td className="px-4 py-3">
@@ -74,6 +76,9 @@ const StudentDetailPanel = ({ student }) => {
   const completedWeekIds = new Set(student.progress?.filter(p => p.completed).map(p => p.week_id) || []);
   const exerciseAttempts = student.exercise_attempts || [];
   const uniqueExercises = new Set(exerciseAttempts.map(a => a.exercise_id));
+  const quizResults = student.quiz_results || [];
+  const quizResultsMap = {};
+  quizResults.forEach(q => { quizResultsMap[q.week_id] = q; });
   
   const timeByDate = {};
   student.time_logs?.forEach(log => {
@@ -88,24 +93,34 @@ const StudentDetailPanel = ({ student }) => {
 
   return (
     <tr>
-      <td colSpan={7} className="px-4 py-4 bg-gray-50 border-t">
+      <td colSpan={8} className="px-4 py-4 bg-gray-50 border-t">
         <div className="grid md:grid-cols-2 gap-6">
+          {/* Week Progress with Quiz Status */}
           <div>
-            <h4 className="font-semibold text-gray-800 mb-3">Week Progress</h4>
+            <h4 className="font-semibold text-gray-800 mb-3">Week & Quiz Progress</h4>
             <div className="space-y-1 max-h-64 overflow-y-auto">
-              {allWeeks.map(week => (
-                <div key={week.id} className="flex items-center gap-2 text-sm">
-                  {completedWeekIds.has(week.id) ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                  ) : (
-                    <XCircle className="w-4 h-4 text-gray-300 flex-shrink-0" />
-                  )}
-                  <span className={completedWeekIds.has(week.id) ? 'text-gray-700' : 'text-gray-400'}>{week.title}</span>
-                </div>
-              ))}
+              {allWeeks.map(week => {
+                const quizResult = quizResultsMap[week.id];
+                return (
+                  <div key={week.id} className="flex items-center gap-2 text-sm">
+                    {completedWeekIds.has(week.id) ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                    ) : (
+                      <XCircle className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                    )}
+                    <span className={completedWeekIds.has(week.id) ? 'text-gray-700' : 'text-gray-400'}>{week.title}</span>
+                    {quizResult && (
+                      <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${quizResult.passed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        Quiz: {quizResult.score}%
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
+          {/* Recent Activity Chart */}
           <div>
             <h4 className="font-semibold text-gray-800 mb-3">Recent Activity (Last 7 Days)</h4>
             {activityData.length > 0 ? (
@@ -123,7 +138,33 @@ const StudentDetailPanel = ({ student }) => {
             )}
           </div>
 
-          <div className="md:col-span-2">
+          {/* Quiz Summary */}
+          <div>
+            <h4 className="font-semibold text-gray-800 mb-3">Quiz Performance</h4>
+            {quizResults.length > 0 ? (
+              <div className="space-y-2">
+                <div className="flex gap-4 text-sm">
+                  <div className="bg-green-50 px-3 py-2 rounded-lg">
+                    <span className="text-green-700 font-semibold">{quizResults.filter(q => q.passed).length}</span>
+                    <span className="text-green-600 ml-1">Passed</span>
+                  </div>
+                  <div className="bg-red-50 px-3 py-2 rounded-lg">
+                    <span className="text-red-700 font-semibold">{quizResults.filter(q => !q.passed).length}</span>
+                    <span className="text-red-600 ml-1">Failed</span>
+                  </div>
+                  <div className="bg-blue-50 px-3 py-2 rounded-lg">
+                    <span className="text-blue-700 font-semibold">{Math.round(quizResults.reduce((sum, q) => sum + q.score, 0) / quizResults.length)}%</span>
+                    <span className="text-blue-600 ml-1">Avg Score</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-gray-400 text-sm">No quizzes attempted yet</p>
+            )}
+          </div>
+
+          {/* Exercise Activity */}
+          <div>
             <h4 className="font-semibold text-gray-800 mb-3">Exercise Activity</h4>
             {exerciseAttempts.length > 0 ? (
               <div className="flex flex-wrap gap-2">
@@ -209,12 +250,13 @@ export default function AdminDashboard() {
   ].filter(d => d.value > 0);
 
   const exportCSV = () => {
-    const headers = ['Name', 'Email', 'Progress %', 'Weeks Completed', 'Time Spent', 'Exercises Done', 'Joined'];
+    const headers = ['Name', 'Email', 'Progress %', 'Weeks Completed', 'Time Spent', 'Quizzes Passed', 'Exercises Done', 'Joined'];
     const rows = students.map(s => {
       const completed = s.progress?.filter(p => p.completed).length || 0;
       const time = s.time_logs?.reduce((sum, log) => sum + log.seconds_spent, 0) || 0;
+      const quizzesPassed = s.quiz_results?.filter(q => q.passed).length || 0;
       const exercises = new Set(s.exercise_attempts?.map(a => a.exercise_id)).size;
-      return [s.full_name || '', s.email, Math.round((completed / totalWeeks) * 100), completed, formatTime(time), exercises, formatDate(s.created_at)];
+      return [s.full_name || '', s.email, Math.round((completed / totalWeeks) * 100), completed, formatTime(time), quizzesPassed, exercises, formatDate(s.created_at)];
     });
     const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -319,7 +361,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-xl p-4 border shadow-sm">
             <h3 className="font-semibold text-gray-800 mb-4">Completion by Week</h3>
             <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={getAllWeeks().map(week => ({
+              <BarChart data={getAllWeeks().slice(0, 8).map(week => ({
                 name: week.id.replace('week-', 'W').replace('pre-work', 'Pre'),
                 completed: students.filter(s => s.progress?.some(p => p.week_id === week.id && p.completed)).length
               }))}>
@@ -357,6 +399,7 @@ export default function AdminDashboard() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Progress</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Completed</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Time Spent</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Quizzes</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Exercises</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Joined</th>
                   <th className="px-4 py-3 w-8"></th>
@@ -369,7 +412,7 @@ export default function AdminDashboard() {
                     {expandedStudent === student.id && <StudentDetailPanel student={student} />}
                   </React.Fragment>
                 )) : (
-                  <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-500">{searchTerm ? 'No students found' : 'No students enrolled yet'}</td></tr>
+                  <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-500">{searchTerm ? 'No students found' : 'No students enrolled yet'}</td></tr>
                 )}
               </tbody>
             </table>

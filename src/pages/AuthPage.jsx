@@ -57,7 +57,7 @@ export default function AuthPage() {
             <Brain className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-800">AI Fundamentals Bootcamp</h1>
-          <p className="text-gray-500 mt-1">12-Week Curriculum • v2.0</p>
+          <p className="text-gray-500 mt-1">12-Week Curriculum</p>
         </div>
 
         {/* Auth Card */}

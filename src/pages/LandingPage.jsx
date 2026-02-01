@@ -190,7 +190,7 @@ export default function LandingPage() {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16">
             <StatCard value="12" label="Weeks" icon={Calendar} />
-            <StatCard value="11" label="Portfolio Projects" icon={Briefcase} />
+            <StatCard value="8+" label="Portfolio Projects" icon={Briefcase} />
             <StatCard value="$88K+" label="Median Salary" icon={DollarSign} />
             <StatCard value="100%" label="Job-Aligned" icon={Target} />
           </div>
@@ -271,7 +271,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Build a Killer Portfolio</h2>
-            <p className="text-gray-600">11 real-world projects with quantified business impact—not toy datasets</p>
+            <p className="text-gray-600">8 real-world projects + a capstone with quantified business impact</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, i) => (
@@ -279,7 +279,7 @@ export default function LandingPage() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <p className="text-gray-500 text-sm">+ 5 more projects including Image Classification, Document Q&A with RAG, and your Capstone</p>
+            <p className="text-gray-500 text-sm">+ Image Classification, Document Q&A with RAG, and your personalized Capstone Project</p>
           </div>
         </div>
       </section>
@@ -296,7 +296,7 @@ export default function LandingPage() {
               { icon: Sparkles, title: 'Cutting-Edge Content', description: 'Includes LLMs, RAG, Agentic AI, and prompt engineering—skills most bootcamps don\'t cover yet.' },
               { icon: DollarSign, title: 'Business Impact Focus', description: 'Every project quantifies business value. Speak the language employers want to hear.' },
               { icon: GraduationCap, title: 'AI Ethics Foundation', description: 'Start with responsible AI principles. Stand out as a thoughtful, mature candidate.' },
-              { icon: Briefcase, title: 'Portfolio-First', description: '11 GitHub-ready projects prove your skills better than any certificate.' },
+              { icon: Briefcase, title: 'Portfolio-First', description: '8 GitHub-ready projects + capstone prove your skills better than any certificate.' },
               { icon: Award, title: 'Interview Ready', description: 'Embedded interview prep, STAR framework practice, and resume bullet suggestions.' },
             ].map((item, i) => (
               <div key={i} className="text-center">

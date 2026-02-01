@@ -160,8 +160,9 @@ export const getAllStudents = async () => {
     .select(`
       *,
       progress (week_id, completed, completed_at),
-      time_logs (seconds_spent),
-      exercise_attempts (exercise_id, is_correct)
+      time_logs (seconds_spent, logged_at),
+      exercise_attempts (exercise_id, is_correct),
+      quiz_results (quiz_id, week_id, score, passed, completed_at)
     `)
     .eq('role', 'student')
     .order('created_at', { ascending: false });

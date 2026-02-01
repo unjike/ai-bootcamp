@@ -118,7 +118,7 @@ export default function LandingPage() {
     },
     { 
       question: 'What will I be able to do after completing the bootcamp?', 
-      answer: 'You\'ll be prepared for Junior Data Scientist, Data Analyst, ML Engineer, and AI/ML Engineer entry-level roles. You\'ll have 11 portfolio projects on GitHub, practical experience with industry tools, and interview-ready skills.' 
+      answer: 'You\'ll be prepared for Data Scientist, Data Analyst, ML Engineer, and AI Specialist entry-level roles. You\'ll have 8 portfolio projects plus a capstone on GitHub, practical experience with industry tools, and interview-ready skills.' 
     },
     { 
       question: 'Do I need prior machine learning experience?', 

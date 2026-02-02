@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Brain, Users, Clock, TrendingUp, Award, ChevronDown, ChevronRight,
-  ArrowLeft, Search, Download, BarChart3, User, Calendar, Code,
+  ArrowLeft, Search, Download, BarChart3, User, Calendar,
   CheckCircle2, XCircle, AlertCircle
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -165,7 +165,7 @@ const StudentDetailPanel = ({ student }) => {
 };
 
 export default function AdminDashboard() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -174,12 +174,15 @@ export default function AdminDashboard() {
   const [sortBy, setSortBy] = useState('progress');
 
   useEffect(() => {
+    // Wait for auth to finish loading before checking admin status
+    if (authLoading) return;
+    
     if (!isAdmin) {
       navigate('/dashboard');
       return;
     }
     loadStudents();
-  }, [isAdmin]);
+  }, [isAdmin, authLoading]);
 
   const loadStudents = async () => {
     setLoading(true);
@@ -242,7 +245,7 @@ export default function AdminDashboard() {
     a.click();
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full" />

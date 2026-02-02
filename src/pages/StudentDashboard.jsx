@@ -361,7 +361,7 @@ const formatTime = (seconds) => {
 };
 
 export default function StudentDashboard() {
-  const { user, profile, isAdmin } = useAuth();
+  const { user, profile, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [completedItems, setCompletedItems] = useState({});
   const [expandedItems, setExpandedItems] = useState({});
@@ -369,16 +369,21 @@ export default function StudentDashboard() {
   const [totalTime, setTotalTime] = useState(0);
   const [completedQuizzes, setCompletedQuizzes] = useState({});
   const [quizResults, setQuizResults] = useState({});
+  const [dataLoading, setDataLoading] = useState(true);
   const lastLogRef = useRef(Date.now());
 
   // Load all data from database
   useEffect(() => {
     if (user) {
-      loadProgress();
-      loadStats();
-      loadQuizResults();
+      loadAllData();
     }
   }, [user]);
+
+  const loadAllData = async () => {
+    setDataLoading(true);
+    await Promise.all([loadProgress(), loadStats(), loadQuizResults()]);
+    setDataLoading(false);
+  };
 
   // Time tracking - log every 5 minutes
   useEffect(() => {
@@ -477,6 +482,18 @@ export default function StudentDashboard() {
   const completedCount = Object.values(completedItems).filter(Boolean).length;
   const progressPercent = Math.round((completedCount / totalItems) * 100);
   const quizzesPassedCount = Object.values(completedQuizzes).filter(Boolean).length;
+
+  // Show loading spinner while auth or data is loading
+  if (authLoading || dataLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-gray-600">Loading your progress...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50">

@@ -2,14 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Brain, ChevronDown, ChevronRight, CheckCircle2, Circle, BookOpen, 
-  Code, Link, Trophy, Clock, Target, Sparkles, RotateCcw, LogOut,
+  Link, Clock, Target, Sparkles, RotateCcw, LogOut,
   Lock, Unlock, HelpCircle, Award, TrendingUp, X
 } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
 import { 
   signOut, getProgress, updateProgress, getTotalTimeSpent,
-  saveExerciseAttempt, getExerciseAttempts, logTimeSpent,
-  saveQuizResult, getQuizResults
+  logTimeSpent, saveQuizResult, getQuizResults
 } from '../lib/supabase';
 import { curriculum, getAllWeeks, getTotalWeeks, quizzes, isWeekUnlocked } from '../lib/curriculum';
 
@@ -194,47 +193,6 @@ const QuizModal = ({ quiz, weekId, userId, onComplete, onClose, previousResult }
   );
 };
 
-// Code Exercise Component
-const CodeExercise = ({ exercise, userId, onComplete, isCompleted }) => {
-  const [code, setCode] = useState(exercise.starterCode);
-  const [showSolution, setShowSolution] = useState(false);
-  
-  const handleShowSolution = async () => {
-    if (!showSolution && userId && !isCompleted) {
-      await saveExerciseAttempt(userId, exercise.id, code, true);
-      onComplete?.(exercise.id);
-    }
-    setShowSolution(!showSolution);
-  };
-  
-  return (
-    <div className="mt-4 border rounded-lg overflow-hidden">
-      <div className="bg-gray-800 text-white px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Code className="w-4 h-4" />
-          <span className="font-medium">{exercise.title}</span>
-          {isCompleted && <Badge variant="passed">✓ Completed</Badge>}
-        </div>
-        <div className="flex gap-2">
-          <button onClick={() => setCode(exercise.starterCode)}
-            className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-700 rounded hover:bg-gray-600">
-            <RotateCcw className="w-3 h-3" /> Reset
-          </button>
-          <button onClick={handleShowSolution}
-            className="flex items-center gap-1 px-2 py-1 text-xs bg-emerald-600 rounded hover:bg-emerald-500">
-            {showSolution ? 'Hide Solution' : 'Show Solution'}
-          </button>
-        </div>
-      </div>
-      <p className="px-4 py-2 text-sm text-gray-600 bg-gray-50 border-b">{exercise.description}</p>
-      <textarea value={showSolution ? exercise.solution : code}
-        onChange={(e) => !showSolution && setCode(e.target.value)}
-        className="w-full h-80 p-4 font-mono text-sm bg-gray-900 text-green-400 resize-none focus:outline-none"
-        spellCheck={false} readOnly={showSolution} />
-    </div>
-  );
-};
-
 // Week Card Component
 const WeekCard = ({ 
   week, 
@@ -243,11 +201,9 @@ const WeekCard = ({
   expanded, 
   onExpand, 
   userId, 
-  onExerciseComplete,
   onQuizComplete,
   isLocked,
   quizPassed,
-  exerciseCompleted,
   quizResult
 }) => {
   const [showQuiz, setShowQuiz] = useState(false);
@@ -280,7 +236,6 @@ const WeekCard = ({
             {week.isRevised && !isLocked && <Badge variant="revised">REVISED</Badge>}
             {week.hasCapstone && !isLocked && <Badge variant="capstone">★ Capstone Start</Badge>}
             {quizPassed && <Badge variant="passed">Quiz ✓</Badge>}
-            {exerciseCompleted && week.exercise && <Badge variant="passed">Exercise ✓</Badge>}
           </div>
           {isLocked && (
             <p className="text-xs text-gray-400 mt-1">Complete previous weeks to unlock</p>
@@ -349,16 +304,6 @@ const WeekCard = ({
             </div>
           </div>
           
-          {/* Exercise */}
-          {week.exercise && (
-            <CodeExercise 
-              exercise={week.exercise} 
-              userId={userId} 
-              onComplete={onExerciseComplete}
-              isCompleted={exerciseCompleted}
-            />
-          )}
-          
           {/* Quiz Section */}
           {weekQuiz && (
             <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-200">
@@ -422,8 +367,6 @@ export default function StudentDashboard() {
   const [expandedItems, setExpandedItems] = useState({});
   const [activeTab, setActiveTab] = useState('curriculum');
   const [totalTime, setTotalTime] = useState(0);
-  const [exerciseCount, setExerciseCount] = useState(0);
-  const [completedExercises, setCompletedExercises] = useState({});
   const [completedQuizzes, setCompletedQuizzes] = useState({});
   const [quizResults, setQuizResults] = useState({});
   const lastLogRef = useRef(Date.now());
@@ -485,14 +428,6 @@ export default function StudentDashboard() {
   const loadStats = async () => {
     const { data: time } = await getTotalTimeSpent(user.id);
     setTotalTime(time || 0);
-    
-    const { data: attempts } = await getExerciseAttempts(user.id);
-    if (attempts) {
-      const exerciseMap = {};
-      attempts.forEach(a => { exerciseMap[a.exercise_id] = true; });
-      setCompletedExercises(exerciseMap);
-      setExerciseCount(Object.keys(exerciseMap).length);
-    }
   };
 
   const loadQuizResults = async () => {
@@ -521,11 +456,6 @@ export default function StudentDashboard() {
 
   const toggleExpand = (id) => {
     setExpandedItems(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const handleExerciseComplete = (exerciseId) => {
-    setCompletedExercises(prev => ({ ...prev, [exerciseId]: true }));
-    setExerciseCount(prev => prev + 1);
   };
 
   const handleQuizComplete = (quizId, weekId) => {
@@ -627,11 +557,11 @@ export default function StudentDashboard() {
           <div className="bg-white rounded-xl p-4 border shadow-sm">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-amber-100 rounded-lg">
-                <Code className="w-5 h-5 text-amber-600" />
+                <Award className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-800">{exerciseCount}</p>
-                <p className="text-xs text-gray-500">Exercises Done</p>
+                <p className="text-2xl font-bold text-gray-800">{Object.keys(completedItems).length}/{getTotalWeeks()}</p>
+                <p className="text-xs text-gray-500">Weeks Done</p>
               </div>
             </div>
           </div>
@@ -641,7 +571,6 @@ export default function StudentDashboard() {
         <div className="flex gap-2 border-b mb-6">
           {[
             { id: 'curriculum', label: 'Curriculum', icon: BookOpen },
-            { id: 'exercises', label: 'Exercises', icon: Code },
             { id: 'resources', label: 'All Resources', icon: Link }
           ].map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
@@ -657,13 +586,26 @@ export default function StudentDashboard() {
         {/* Content */}
         {activeTab === 'curriculum' && (
           <div className="space-y-6">
+            {/* Target Roles Banner */}
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-4 text-white">
+              <div className="flex items-start gap-3">
+                <Trophy className="w-6 h-6 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold">Target Roles After Completion</h3>
+                  <p className="text-sm opacity-90 mt-1">
+                    Junior Data Scientist ($88-110K) • Data Analyst ($57-75K) • Junior ML Analyst ($90-103K)
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Unlock Progress Info */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <Unlock className="w-5 h-5 text-blue-600 mt-0.5" />
                 <div>
                   <h4 className="font-medium text-blue-800">Progressive Learning Path</h4>
-                  <p className="text-sm text-blue-600">Complete each week's quiz and exercise to unlock the next week. Pre-work and Week 1 are unlocked to start.</p>
+                  <p className="text-sm text-blue-600">Complete each week's quiz to unlock the next week. Pre-work and Week 1 are unlocked to start.</p>
                 </div>
               </div>
             </div>
@@ -681,11 +623,9 @@ export default function StudentDashboard() {
                 expanded={expandedItems[curriculum.preWork.id]}
                 onExpand={() => toggleExpand(curriculum.preWork.id)}
                 userId={user?.id}
-                onExerciseComplete={handleExerciseComplete}
                 onQuizComplete={handleQuizComplete}
                 isLocked={false}
                 quizPassed={completedQuizzes[curriculum.preWork.id]}
-                exerciseCompleted={completedExercises[curriculum.preWork.exercise?.id]}
                 quizResult={quizResults[curriculum.preWork.id]}
               />
             </div>
@@ -696,7 +636,7 @@ export default function StudentDashboard() {
                 <h2 className="text-lg font-semibold text-gray-800 mb-3">{module.title}</h2>
                 <div className="space-y-2">
                   {module.weeks.map(week => {
-                    const isLocked = !isWeekUnlocked(week.id, completedQuizzes, completedExercises);
+                    const isLocked = !isWeekUnlocked(week.id, completedQuizzes);
                     return (
                       <WeekCard
                         key={week.id}
@@ -706,57 +646,14 @@ export default function StudentDashboard() {
                         expanded={expandedItems[week.id]}
                         onExpand={() => toggleExpand(week.id)}
                         userId={user?.id}
-                        onExerciseComplete={handleExerciseComplete}
                         onQuizComplete={handleQuizComplete}
                         isLocked={isLocked}
                         quizPassed={completedQuizzes[week.id]}
-                        exerciseCompleted={completedExercises[week.exercise?.id]}
                         quizResult={quizResults[week.id]}
                       />
                     );
                   })}
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'exercises' && (
-          <div className="space-y-6">
-            <p className="text-gray-600">All hands-on coding exercises (unlock by progressing through weeks):</p>
-            {curriculum.preWork.exercise && (
-              <div>
-                <h3 className="font-semibold text-gray-800 mb-2">Pre-Work</h3>
-                <CodeExercise 
-                  exercise={curriculum.preWork.exercise} 
-                  userId={user?.id} 
-                  onComplete={handleExerciseComplete}
-                  isCompleted={completedExercises[curriculum.preWork.exercise.id]}
-                />
-              </div>
-            )}
-            {curriculum.modules.map(module => (
-              <div key={module.id}>
-                <h3 className="font-semibold text-gray-800 mb-2">{module.title}</h3>
-                {module.weeks.filter(w => w.exercise).map(week => {
-                  const isLocked = !isWeekUnlocked(week.id, completedQuizzes, completedExercises);
-                  return (
-                    <div key={week.id} className="mb-4">
-                      <p className="text-sm text-gray-500 mb-1 flex items-center gap-2">
-                        {week.title}
-                        {isLocked && <Badge variant="locked">🔒 Locked</Badge>}
-                      </p>
-                      {!isLocked && (
-                        <CodeExercise 
-                          exercise={week.exercise} 
-                          userId={user?.id} 
-                          onComplete={handleExerciseComplete}
-                          isCompleted={completedExercises[week.exercise.id]}
-                        />
-                      )}
-                    </div>
-                  );
-                })}
               </div>
             ))}
           </div>
@@ -789,7 +686,7 @@ export default function StudentDashboard() {
       </div>
 
       <footer className="max-w-5xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
-        AI Fundamentals Bootcamp v2.0 • Progress saves automatically
+        AI Fundamentals Bootcamp v3.1 - Progress saves automatically
       </footer>
     </div>
   );

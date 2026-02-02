@@ -1,12 +1,11 @@
-// AI Fundamentals Bootcamp - Curriculum Data (continued)
-// This is the complete file - copy the entire content
+// AI Fundamentals Bootcamp - Curriculum Data
+// Version: 3.1 - Removed exercises, expanded quizzes to 10 questions
 
 export const curriculum = {
   preWork: {
     id: 'pre-work',
     title: 'Pre-Work: AI Ethics & Responsible AI',
     duration: '~8 hours (self-paced)',
-    isNew: true,
     topics: [
       'Introduction to AI ethics and why it matters',
       'Bias in data and algorithms: sources, detection, and mitigation',
@@ -26,66 +25,7 @@ export const curriculum = {
       { title: 'Anthropic Core Views on AI Safety', url: 'https://www.anthropic.com/news/core-views-on-ai-safety', type: 'article' },
       { title: 'AI Ethics Course - Coursera', url: 'https://www.coursera.org/learn/ai-ethics', type: 'course' },
       { title: 'Fairness in ML - Google', url: 'https://developers.google.com/machine-learning/fairness-overview', type: 'tutorial' }
-    ],
-    exercise: {
-      id: 'ex-prework',
-      title: 'AI Ethics Case Analysis',
-      description: 'Analyze a hiring dataset for potential biases. This mirrors real-world AI ethics challenges like the Amazon hiring algorithm case.',
-      starterCode: `import pandas as pd
-import numpy as np
-
-# Sample hiring dataset - similar to real AI ethics cases
-data = {
-    'age': [25, 35, 45, 28, 52, 33, 41, 29, 38, 55],
-    'gender': ['M', 'F', 'M', 'F', 'M', 'F', 'M', 'F', 'M', 'F'],
-    'years_exp': [2, 8, 15, 3, 20, 7, 12, 4, 10, 22],
-    'hired': [1, 1, 0, 1, 0, 1, 0, 1, 1, 0]
-}
-df = pd.DataFrame(data)
-
-# TODO: Analyze this dataset for potential biases
-# 1. Check hiring rates by gender
-# 2. Check hiring rates by age groups
-# 3. Identify any concerning patterns
-# 4. Recommend mitigation strategies
-
-print("Hiring rate by gender:")
-print(df.groupby('gender')['hired'].mean())
-`,
-      solution: `import pandas as pd
-import numpy as np
-
-data = {
-    'age': [25, 35, 45, 28, 52, 33, 41, 29, 38, 55],
-    'gender': ['M', 'F', 'F', 'F', 'M', 'F', 'M', 'F', 'M', 'F'],
-    'years_exp': [2, 8, 15, 3, 20, 7, 12, 4, 10, 22],
-    'hired': [1, 1, 0, 1, 0, 1, 0, 1, 1, 0]
-}
-df = pd.DataFrame(data)
-
-# 1. Hiring rates by gender
-print("Hiring rate by gender:")
-print(df.groupby('gender')['hired'].mean())
-
-# 2. Hiring rates by age group
-df['age_group'] = pd.cut(df['age'], bins=[20, 30, 40, 50, 60], labels=['20-30', '30-40', '40-50', '50-60'])
-print("\\nHiring rate by age group:")
-print(df.groupby('age_group')['hired'].mean())
-
-# 3. Correlation analysis
-print("\\nCorrelation with hiring decision:")
-print(f"Age: {df['age'].corr(df['hired']):.3f}")
-print(f"Years exp: {df['years_exp'].corr(df['hired']):.3f}")
-
-# 4. Findings & Recommendations
-print("\\n--- FINDINGS ---")
-print("- Younger candidates (20-30) have higher hiring rates")
-print("- This could indicate age bias in the hiring process")
-print("\\n--- RECOMMENDATIONS ---")
-print("1. Blind resume screening (remove age indicators)")
-print("2. Structured interviews with standardized scoring")
-print("3. Regular bias audits on hiring outcomes")`
-    }
+    ]
   },
   modules: [
     {
@@ -101,15 +41,14 @@ print("3. Regular bias audits on hiring outcomes")`
           ],
           asyncWork: [
             'Readings on AI applications across industries',
-            'Reflection exercise on AI in your own field',
+            'Reflection exercise on AI in their own field',
             'Connect learnings to pre-work ethics module'
           ],
           resources: [
-            { title: 'Stanford CS229 - ML Course', url: 'https://cs229.stanford.edu/', type: 'course' },
             { title: 'Elements of AI - Free Course', url: 'https://www.elementsofai.com/', type: 'course' },
-            { title: '3Blue1Brown - Neural Networks', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi', type: 'video' }
-          ],
-          exercise: null
+            { title: 'Google AI Crash Course', url: 'https://developers.google.com/machine-learning/crash-course', type: 'course' },
+            { title: 'AI Timeline - Our World in Data', url: 'https://ourworldindata.org/brief-history-of-ai', type: 'article' }
+          ]
         },
         {
           id: 'week-2',
@@ -120,83 +59,19 @@ print("3. Regular bias audits on hiring outcomes")`
           ],
           asyncWork: [
             'Analyze a provided dataset, identify patterns',
-            'Document data quality issues found',
-            'Create visualizations to communicate insights'
+            'Practice data cleaning techniques',
+            'Create visualizations to communicate findings'
           ],
+          project: {
+            title: 'EDA on IBM HR Attrition Dataset',
+            description: 'Data cleaning, visualization, business recommendations'
+          },
           resources: [
             { title: 'Pandas Documentation', url: 'https://pandas.pydata.org/docs/', type: 'docs' },
             { title: 'Kaggle - Data Cleaning', url: 'https://www.kaggle.com/learn/data-cleaning', type: 'tutorial' },
             { title: 'Matplotlib Tutorial', url: 'https://matplotlib.org/stable/tutorials/index.html', type: 'tutorial' },
             { title: 'IBM HR Attrition Dataset', url: 'https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset', type: 'tool' }
-          ],
-          exercise: {
-            id: 'ex-week2',
-            title: 'EDA on IBM HR Attrition Dataset',
-            description: 'Perform data cleaning, visualization, and business recommendations on the IBM HR dataset. Goal: Identify factors contributing to employee attrition.',
-            starterCode: `import pandas as pd
-import numpy as np
-
-# IBM HR Attrition Dataset (simplified)
-np.random.seed(42)
-n = 500
-
-data = {
-    'Age': np.random.randint(18, 60, n),
-    'MonthlyIncome': np.random.randint(1000, 20000, n),
-    'YearsAtCompany': np.random.randint(0, 40, n),
-    'JobSatisfaction': np.random.randint(1, 5, n),
-    'WorkLifeBalance': np.random.randint(1, 5, n),
-    'OverTime': np.random.choice(['Yes', 'No'], n),
-    'Department': np.random.choice(['Sales', 'R&D', 'HR'], n),
-    'Attrition': np.random.choice(['Yes', 'No'], n, p=[0.16, 0.84])
-}
-df = pd.DataFrame(data)
-
-# TODO: Perform EDA
-# 1. Data cleaning - check for missing values, duplicates
-# 2. Summary statistics
-# 3. Visualize attrition by department, overtime, satisfaction
-# 4. Business recommendations to reduce attrition
-
-print("Dataset Shape:", df.shape)
-print(df.head())
-`,
-            solution: `import pandas as pd
-import numpy as np
-
-np.random.seed(42)
-n = 500
-data = {
-    'Age': np.random.randint(18, 60, n),
-    'MonthlyIncome': np.random.randint(1000, 20000, n),
-    'YearsAtCompany': np.random.randint(0, 40, n),
-    'JobSatisfaction': np.random.randint(1, 5, n),
-    'WorkLifeBalance': np.random.randint(1, 5, n),
-    'OverTime': np.random.choice(['Yes', 'No'], n),
-    'Department': np.random.choice(['Sales', 'R&D', 'HR'], n),
-    'Attrition': np.random.choice(['Yes', 'No'], n, p=[0.16, 0.84])
-}
-df = pd.DataFrame(data)
-
-print("=== DATA CLEANING ===")
-print(f"Missing values: {df.isnull().sum().sum()}")
-print(f"Duplicates: {df.duplicated().sum()}")
-
-print("\\n=== ATTRITION ANALYSIS ===")
-attrition_rate = (df['Attrition'] == 'Yes').mean() * 100
-print(f"Overall Attrition Rate: {attrition_rate:.1f}%")
-
-print("\\nAttrition by Department:")
-print(df.groupby('Department')['Attrition'].apply(lambda x: (x == 'Yes').mean() * 100).round(1))
-
-print("\\nAttrition by Overtime:")
-print(df.groupby('OverTime')['Attrition'].apply(lambda x: (x == 'Yes').mean() * 100).round(1))
-
-print("\\n=== BUSINESS RECOMMENDATIONS ===")
-print("1. Review overtime policies - correlates with higher attrition")
-print("2. Focus retention efforts on low satisfaction employees")
-print("3. Department-specific strategies based on attrition rates")`
-          }
+          ]
         },
         {
           id: 'week-3',
@@ -210,6 +85,10 @@ print("3. Department-specific strategies based on attrition rates")`
             'Set up working environment (Google Colab, Git/GitHub)',
             'Practice data extraction from SQLite database'
           ],
+          project: {
+            title: 'TechMart SQL Data Pipeline',
+            description: '\$2.4M transaction analysis, customer segmentation, cohort analysis'
+          },
           sqlTopics: [
             'Basic queries (SELECT, WHERE, ORDER BY)',
             'Aggregations (GROUP BY, COUNT, SUM, AVG)',
@@ -223,72 +102,7 @@ print("3. Department-specific strategies based on attrition rates")`
             { title: 'SQLBolt - Interactive SQL', url: 'https://sqlbolt.com/', type: 'tutorial' },
             { title: 'Mode SQL Tutorial', url: 'https://mode.com/sql-tutorial/', type: 'tutorial' },
             { title: 'Google Colab', url: 'https://colab.research.google.com/', type: 'tool' }
-          ],
-          exercise: {
-            id: 'ex-week3',
-            title: 'TechMart SQL Data Pipeline',
-            description: 'Analyze $2.4M in e-commerce transactions. Practice SQL queries including subqueries, CTEs, window functions, customer segmentation, and cohort analysis.',
-            starterCode: `import pandas as pd
-import numpy as np
-
-np.random.seed(42)
-n_transactions = 5000
-data = {
-    'transaction_id': range(1, n_transactions + 1),
-    'customer_id': np.random.randint(1, 501, n_transactions),
-    'product_category': np.random.choice(['Electronics', 'Clothing', 'Home', 'Sports', 'Books'], n_transactions),
-    'amount': np.random.uniform(10, 800, n_transactions).round(2),
-    'transaction_date': pd.date_range('2025-01-01', periods=n_transactions, freq='H')
-}
-df = pd.DataFrame(data)
-
-print(f"Total Revenue: \${df['amount'].sum():,.2f}")
-
-# TODO: Write SQL-style queries using pandas
-# 1. Revenue by product category (GROUP BY)
-# 2. Top 10 customers by total spend
-# 3. Monthly revenue trend
-# 4. Customer segmentation (High/Medium/Low value)
-# 5. Cohort analysis
-`,
-            solution: `import pandas as pd
-import numpy as np
-
-np.random.seed(42)
-n_transactions = 5000
-data = {
-    'transaction_id': range(1, n_transactions + 1),
-    'customer_id': np.random.randint(1, 501, n_transactions),
-    'product_category': np.random.choice(['Electronics', 'Clothing', 'Home', 'Sports', 'Books'], n_transactions),
-    'amount': np.random.uniform(10, 800, n_transactions).round(2),
-    'transaction_date': pd.date_range('2025-01-01', periods=n_transactions, freq='H')
-}
-df = pd.DataFrame(data)
-
-print(f"Total Revenue: \${df['amount'].sum():,.2f}")
-
-# 1. Revenue by category
-print("\\n=== REVENUE BY CATEGORY ===")
-print(df.groupby('product_category')['amount'].agg(['sum', 'mean', 'count']).round(2))
-
-# 2. Top 10 customers
-print("\\n=== TOP 10 CUSTOMERS ===")
-print(df.groupby('customer_id')['amount'].sum().nlargest(10).round(2))
-
-# 3. Monthly trend
-df['month'] = df['transaction_date'].dt.to_period('M')
-print("\\n=== MONTHLY REVENUE ===")
-print(df.groupby('month')['amount'].sum().round(2))
-
-# 4. Customer segmentation
-customer_totals = df.groupby('customer_id')['amount'].sum()
-def segment(total):
-    if total > 2000: return 'High Value'
-    elif total > 1000: return 'Medium Value'
-    else: return 'Low Value'
-print("\\n=== CUSTOMER SEGMENTS ===")
-print(customer_totals.apply(segment).value_counts())`
-          }
+          ]
         }
       ]
     },
@@ -308,69 +122,15 @@ print(customer_totals.apply(segment).value_counts())`
             'Interpret model coefficients for business insights',
             'Document model performance and findings'
           ],
+          project: {
+            title: 'Lending Club Interest Rate Prediction (Part A)',
+            description: 'Predict interest rates on 890K+ loans using regression techniques'
+          },
           resources: [
             { title: 'Scikit-learn Linear Models', url: 'https://scikit-learn.org/stable/modules/linear_model.html', type: 'docs' },
             { title: 'StatQuest - Linear Regression', url: 'https://www.youtube.com/watch?v=nk2CQITm_eo', type: 'video' },
             { title: 'Lending Club Dataset', url: 'https://www.kaggle.com/datasets/wordsforthewise/lending-club', type: 'tool' }
-          ],
-          exercise: {
-            id: 'ex-week4',
-            title: 'Lending Club Interest Rate Prediction (Part A)',
-            description: 'Predict interest rates on 890K+ loans using regression techniques.',
-            starterCode: `import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-
-np.random.seed(42)
-n = 1000
-
-loan_amount = np.random.randint(1000, 40000, n)
-annual_income = np.random.randint(30000, 150000, n)
-debt_to_income = np.random.uniform(0, 40, n)
-credit_score = np.random.randint(600, 850, n)
-
-interest_rate = 5 + (40000 - loan_amount) * 0.0001 + (850 - credit_score) * 0.02 + debt_to_income * 0.1 + np.random.randn(n) * 2
-
-X = np.column_stack([loan_amount, annual_income, debt_to_income, credit_score])
-y = interest_rate
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# TODO: Train and evaluate regression model
-`,
-            solution: `import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-
-np.random.seed(42)
-n = 1000
-
-loan_amount = np.random.randint(1000, 40000, n)
-annual_income = np.random.randint(30000, 150000, n)
-debt_to_income = np.random.uniform(0, 40, n)
-credit_score = np.random.randint(600, 850, n)
-
-interest_rate = 5 + (40000 - loan_amount) * 0.0001 + (850 - credit_score) * 0.02 + debt_to_income * 0.1 + np.random.randn(n) * 2
-
-X = np.column_stack([loan_amount, annual_income, debt_to_income, credit_score])
-y = interest_rate
-feature_names = ['loan_amount', 'annual_income', 'debt_to_income', 'credit_score']
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-model = LinearRegression()
-model.fit(X_train, y_train)
-
-y_pred = model.predict(X_test)
-print(f"RMSE: {np.sqrt(mean_squared_error(y_test, y_pred)):.2f}%")
-print(f"R² Score: {r2_score(y_test, y_pred):.4f}")
-
-print("\\nFeature Coefficients:")
-for name, coef in zip(feature_names, model.coef_):
-    print(f"  {name}: {coef:.6f}")`
-          }
+          ]
         },
         {
           id: 'week-5',
@@ -384,67 +144,15 @@ for name, coef in zip(feature_names, model.coef_):
             'Handle class imbalance techniques (SMOTE, class weights)',
             'Document model selection rationale'
           ],
+          project: {
+            title: 'Lending Club Default Prediction (Part B)',
+            description: 'Build classifier with AUC 0.75+ on imbalanced data. Each prevented default saves ~\$9,000'
+          },
           resources: [
             { title: 'Scikit-learn Classification', url: 'https://scikit-learn.org/stable/modules/tree.html', type: 'docs' },
             { title: 'StatQuest - Decision Trees', url: 'https://www.youtube.com/watch?v=_L39rN6gz7Y', type: 'video' },
             { title: 'StatQuest - Random Forests', url: 'https://www.youtube.com/watch?v=J4Wdy0Wc_xQ', type: 'video' }
-          ],
-          exercise: {
-            id: 'ex-week5',
-            title: 'Lending Club Default Prediction (Part B)',
-            description: 'Build a classifier with AUC 0.75+ on imbalanced data. Each prevented default saves ~$9,000.',
-            starterCode: `import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
-
-np.random.seed(42)
-n = 2000
-
-credit_score = np.random.randint(550, 850, n)
-debt_to_income = np.random.uniform(0, 50, n)
-loan_amount = np.random.randint(1000, 40000, n)
-
-default_prob = 1 / (1 + np.exp(-(-5 + (700 - credit_score) * 0.02 + debt_to_income * 0.05)))
-default = (np.random.random(n) < default_prob).astype(int)
-
-X = np.column_stack([credit_score, debt_to_income, loan_amount])
-y = default
-
-print(f"Default rate: {y.mean()*100:.1f}%")
-
-# TODO: Build and evaluate classifier (target AUC > 0.75)
-`,
-            solution: `import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
-
-np.random.seed(42)
-n = 2000
-
-credit_score = np.random.randint(550, 850, n)
-debt_to_income = np.random.uniform(0, 50, n)
-loan_amount = np.random.randint(1000, 40000, n)
-
-default_prob = 1 / (1 + np.exp(-(-5 + (700 - credit_score) * 0.02 + debt_to_income * 0.05)))
-default = (np.random.random(n) < default_prob).astype(int)
-
-X = np.column_stack([credit_score, debt_to_income, loan_amount])
-y = default
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-rf = RandomForestClassifier(n_estimators=100, class_weight='balanced', random_state=42)
-rf.fit(X_train, y_train)
-rf_auc = roc_auc_score(y_test, rf.predict_proba(X_test)[:, 1])
-print(f"Random Forest AUC: {rf_auc:.3f}")
-
-print(f"\\nBusiness Impact:")
-print(f"Defaults in test: {y_test.sum()}")
-print(f"Cost per default: $9,000")
-print(f"Potential savings: \${int(y_test.sum() * 0.5 * 9000):,}")`
-          }
+          ]
         },
         {
           id: 'week-6',
@@ -459,6 +167,10 @@ print(f"Potential savings: \${int(y_test.sum() * 0.5 * 9000):,}")`
             'Prepare for deployment (model serialization)',
             'Optional: Time Series Forecasting module (ARIMA, Prophet)'
           ],
+          project: {
+            title: 'Model Evaluation & Streamlit Deployment (Parts C & D)',
+            description: 'Complete model evaluation with cross-validation. Part D (Bonus): Deploy as interactive Streamlit web application'
+          },
           optionalModule: {
             title: 'Time Series Forecasting',
             description: 'Introduction to time series data, trend and seasonality, ARIMA basics, forecasting with Prophet. For finance, supply chain, or demand forecasting roles.'
@@ -467,49 +179,7 @@ print(f"Potential savings: \${int(y_test.sum() * 0.5 * 9000):,}")`
             { title: 'Scikit-learn Model Evaluation', url: 'https://scikit-learn.org/stable/modules/model_evaluation.html', type: 'docs' },
             { title: 'StatQuest - Cross Validation', url: 'https://www.youtube.com/watch?v=fSytzGwwBVw', type: 'video' },
             { title: 'Streamlit Documentation', url: 'https://docs.streamlit.io/', type: 'docs' }
-          ],
-          exercise: {
-            id: 'ex-week6',
-            title: 'Model Evaluation & Streamlit Deployment (Parts C & D)',
-            description: 'Complete model evaluation with cross-validation. Part D (Bonus): Deploy as interactive Streamlit web application.',
-            starterCode: `import numpy as np
-from sklearn.datasets import make_classification
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.metrics import confusion_matrix, roc_auc_score
-
-X, y = make_classification(n_samples=1000, n_features=10, n_classes=2, weights=[0.85, 0.15], random_state=42)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-
-# TODO: Complete evaluation with confusion matrix, metrics, cross-validation
-`,
-            solution: `import numpy as np
-from sklearn.datasets import make_classification
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.metrics import confusion_matrix, roc_auc_score, precision_score, recall_score, f1_score
-
-X, y = make_classification(n_samples=1000, n_features=10, n_classes=2, weights=[0.85, 0.15], random_state=42)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
-y_proba = model.predict_proba(X_test)[:, 1]
-
-cm = confusion_matrix(y_test, y_pred)
-print(f"Confusion Matrix:\\n  TN={cm[0,0]} FP={cm[0,1]}\\n  FN={cm[1,0]} TP={cm[1,1]}")
-print(f"\\nPrecision: {precision_score(y_test, y_pred):.3f}")
-print(f"Recall: {recall_score(y_test, y_pred):.3f}")
-print(f"F1: {f1_score(y_test, y_pred):.3f}")
-print(f"AUC: {roc_auc_score(y_test, y_proba):.3f}")
-
-cv_scores = cross_val_score(model, X, y, cv=5, scoring='f1')
-print(f"\\n5-Fold CV F1: {cv_scores.mean():.3f} (+/- {cv_scores.std()*2:.3f})")`
-          }
+          ]
         },
         {
           id: 'week-7',
@@ -523,6 +193,10 @@ print(f"\\n5-Fold CV F1: {cv_scores.mean():.3f} (+/- {cv_scores.std()*2:.3f})")`
             'Handle preprocessing for recommendation systems',
             'Evaluate recommendations with RMSE and precision@k'
           ],
+          project: {
+            title: 'MovieLens Recommendation System',
+            description: 'Hybrid recommender combining collaborative filtering and content-based approaches on 100K ratings'
+          },
           keyConcepts: [
             'User-item interaction matrices',
             'Cosine similarity',
@@ -534,58 +208,7 @@ print(f"\\n5-Fold CV F1: {cv_scores.mean():.3f} (+/- {cv_scores.std()*2:.3f})")`
             { title: 'Scikit-learn Clustering', url: 'https://scikit-learn.org/stable/modules/clustering.html', type: 'docs' },
             { title: 'Google - Recommendation Systems', url: 'https://developers.google.com/machine-learning/recommendation', type: 'course' },
             { title: 'MovieLens Dataset', url: 'https://grouplens.org/datasets/movielens/', type: 'tool' }
-          ],
-          exercise: {
-            id: 'ex-week7',
-            title: 'MovieLens Recommendation System',
-            description: 'Build a hybrid recommender combining collaborative filtering and content-based approaches on 100K ratings.',
-            starterCode: `import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-
-np.random.seed(42)
-n_users, n_movies = 100, 50
-
-ratings = np.zeros((n_users, n_movies))
-for i in range(n_users):
-    rated_movies = np.random.choice(n_movies, np.random.randint(10, 21), replace=False)
-    ratings[i, rated_movies] = np.random.randint(1, 6, len(rated_movies))
-
-print(f"Sparsity: {(ratings == 0).mean()*100:.1f}%")
-
-# TODO: Build collaborative filtering recommender
-`,
-            solution: `import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-
-np.random.seed(42)
-n_users, n_movies = 100, 50
-
-ratings = np.zeros((n_users, n_movies))
-for i in range(n_users):
-    rated_movies = np.random.choice(n_movies, np.random.randint(10, 21), replace=False)
-    ratings[i, rated_movies] = np.random.randint(1, 6, len(rated_movies))
-
-# User-user similarity
-user_sim = cosine_similarity(ratings)
-np.fill_diagonal(user_sim, 0)
-
-# Top-5 recommendations for User 0
-target_user = 0
-unrated = np.where(ratings[target_user] == 0)[0]
-predictions = []
-for movie_idx in unrated:
-    rated_by = ratings[:, movie_idx] > 0
-    if rated_by.sum() > 0:
-        sims = user_sim[target_user, rated_by]
-        if np.abs(sims).sum() > 0:
-            pred = np.dot(sims, ratings[rated_by, movie_idx]) / np.abs(sims).sum()
-            predictions.append((f'Movie_{movie_idx}', pred))
-
-predictions.sort(key=lambda x: x[1], reverse=True)
-print("Top 5 Recommendations:")
-for movie, score in predictions[:5]:
-    print(f"  {movie}: {score:.2f}")`
-          }
+          ]
         }
       ]
     },
@@ -606,6 +229,10 @@ for movie, score in predictions[:5]:
             'Tune hyperparameters (layers, neurons, learning rate)',
             '★ Capstone Project: Receive guidelines and begin project planning'
           ],
+          project: {
+            title: 'Heart Disease Prediction with Neural Networks',
+            description: 'UCI dataset, compare NN vs traditional ML, \$75K per missed diagnosis business impact'
+          },
           capstoneIntro: {
             description: 'Students receive capstone guidelines and begin project planning',
             requirements: [
@@ -627,68 +254,7 @@ for movie, score in predictions[:5]:
             { title: 'Keras Documentation', url: 'https://keras.io/guides/', type: 'docs' },
             { title: '3Blue1Brown - Neural Networks', url: 'https://www.youtube.com/watch?v=aircAruvnKk', type: 'video' },
             { title: 'UCI Heart Disease Dataset', url: 'https://archive.ics.uci.edu/dataset/45/heart+disease', type: 'tool' }
-          ],
-          exercise: {
-            id: 'ex-week8',
-            title: 'Heart Disease Prediction with Neural Networks',
-            description: 'Build a neural network using the UCI dataset. Compare NN vs traditional ML. Business impact: ~$75K per missed diagnosis.',
-            starterCode: `import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
-
-np.random.seed(42)
-n = 500
-
-age = np.random.randint(30, 80, n)
-cholesterol = np.random.randint(150, 400, n)
-max_heart_rate = np.random.randint(80, 200, n)
-
-disease_prob = 1 / (1 + np.exp(-(-3 + age * 0.04 + cholesterol * 0.003 - max_heart_rate * 0.02)))
-heart_disease = (np.random.random(n) < disease_prob).astype(int)
-
-X = np.column_stack([age, cholesterol, max_heart_rate])
-y = heart_disease
-
-print(f"Disease prevalence: {y.mean()*100:.1f}%")
-print(f"Business context: ~$75K cost per missed diagnosis")
-
-# TODO: Scale features, train baseline, design NN architecture
-`,
-            solution: `import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
-
-np.random.seed(42)
-n = 500
-
-age = np.random.randint(30, 80, n)
-cholesterol = np.random.randint(150, 400, n)
-max_heart_rate = np.random.randint(80, 200, n)
-
-disease_prob = 1 / (1 + np.exp(-(-3 + age * 0.04 + cholesterol * 0.003 - max_heart_rate * 0.02)))
-heart_disease = (np.random.random(n) < disease_prob).astype(int)
-
-X = np.column_stack([age, cholesterol, max_heart_rate])
-y = heart_disease
-
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
-
-log_reg = LogisticRegression()
-log_reg.fit(X_train, y_train)
-print(f"Logistic Regression AUC: {roc_auc_score(y_test, log_reg.predict_proba(X_test)[:, 1]):.3f}")
-
-print("\\nNeural Network Architecture:")
-print("  Input: 3 features")
-print("  Hidden 1: 16 neurons, ReLU")
-print("  Hidden 2: 8 neurons, ReLU")
-print("  Output: 1 neuron, Sigmoid")`
-          }
+          ]
         },
         {
           id: 'week-9',
@@ -702,46 +268,16 @@ print("  Output: 1 neuron, Sigmoid")`
             'Readings on transformer architecture',
             'Continue capstone project'
           ],
+          project: {
+            title: 'Image Classification with Transfer Learning',
+            description: 'Kaggle dataset of student choice, demonstrate 80%+ reduction in training time'
+          },
           keyBridge: 'Week 9 connects traditional deep learning to modern LLMs by explaining why Transformers replaced RNNs (parallelization, direct long-range connections)',
           resources: [
             { title: 'TensorFlow Transfer Learning', url: 'https://www.tensorflow.org/tutorials/images/transfer_learning', type: 'tutorial' },
             { title: 'Illustrated Transformer', url: 'https://jalammar.github.io/illustrated-transformer/', type: 'article' },
             { title: 'Kaggle Image Classification', url: 'https://www.kaggle.com/competitions?search=image+classification', type: 'tool' }
-          ],
-          exercise: {
-            id: 'ex-week9',
-            title: 'Image Classification with Transfer Learning',
-            description: 'Use pre-trained models (VGG16/ResNet) on a Kaggle dataset. Demonstrate 80%+ reduction in training time.',
-            starterCode: `# Transfer Learning for Image Classification
-print("TRANSFER LEARNING WORKFLOW")
-print("1. Load pre-trained model (VGG16/ResNet)")
-print("2. Freeze base layers")
-print("3. Add custom classification head")
-print("4. Train on your dataset")
-
-# TODO: Explain why this works and when to use it
-`,
-            solution: `print("TRANSFER LEARNING IMPLEMENTATION")
-print("""
-# Keras code:
-base_model = VGG16(weights='imagenet', include_top=False)
-for layer in base_model.layers:
-    layer.trainable = False
-
-x = GlobalAveragePooling2D()(base_model.output)
-x = Dense(256, activation='relu')(x)
-output = Dense(num_classes, activation='softmax')(x)
-""")
-
-print("\\nTraining Time Comparison:")
-print("  From scratch: 100 epochs, 10+ hours")
-print("  Transfer: 10 epochs, <1 hour (80%+ reduction)")
-
-print("\\nWhy Transformers Replaced RNNs:")
-print("  - Parallel processing (faster)")
-print("  - Direct long-range connections")
-print("  - No vanishing gradients")`
-          }
+          ]
         }
       ]
     },
@@ -761,6 +297,10 @@ print("  - No vanishing gradients")`
             'API exploration and experimentation (OpenAI, Anthropic)',
             'Continue capstone project'
           ],
+          project: {
+            title: 'LLM-Powered Customer Support System',
+            description: 'Ticket classification (85%+ accuracy) and response generation using prompt engineering, \$500K+ annual savings potential'
+          },
           keyConcepts: [
             'Tokenization and token efficiency (cost optimization)',
             'Text embeddings and semantic similarity',
@@ -774,36 +314,7 @@ print("  - No vanishing gradients")`
             { title: 'Anthropic - Claude Documentation', url: 'https://docs.anthropic.com/', type: 'docs' },
             { title: 'OpenAI - GPT Best Practices', url: 'https://platform.openai.com/docs/guides/prompt-engineering', type: 'docs' },
             { title: 'Prompt Engineering Guide', url: 'https://www.promptingguide.ai/', type: 'tutorial' }
-          ],
-          exercise: {
-            id: 'ex-week10',
-            title: 'LLM-Powered Customer Support System',
-            description: 'Build ticket classification (85%+ accuracy) and response generation using prompt engineering. Potential: $500K+ annual savings.',
-            starterCode: `# LLM Customer Support System
-tickets = [
-    {"id": 1, "text": "I can't log into my account"},
-    {"id": 2, "text": "When will my order arrive?"},
-    {"id": 3, "text": "I want a refund"},
-]
-categories = ["Account Issues", "Shipping", "Refunds", "Billing", "Technical Support"]
-
-# TODO: Design prompts for classification and response generation
-`,
-            solution: `print("ZERO-SHOT PROMPT:")
-print('Classify this ticket: "{text}" into one category: Account Issues, Shipping, Refunds, Billing, Technical Support')
-
-print("\\nFEW-SHOT PROMPT:")
-print('Examples: "I forgot my password" → Account Issues, "Where is my package?" → Shipping')
-
-print("\\nRESPONSE GENERATION (ROLE → CONTEXT → TASK → FORMAT → CONSTRAINTS):")
-print("ROLE: Customer support agent")
-print("CONTEXT: Ticket: {text}, Category: {category}")
-print("TASK: Write helpful response")
-print("FORMAT: Greeting, acknowledgment, solution, closing")
-print("CONSTRAINTS: Under 100 words, empathetic, no timeline promises")
-
-print("\\nBUSINESS IMPACT: $500K+ annual savings with 85% auto-resolution")`
-          }
+          ]
         },
         {
           id: 'week-11',
@@ -817,6 +328,10 @@ print("\\nBUSINESS IMPACT: $500K+ annual savings with 85% auto-resolution")`
             'Implement document Q&A system',
             'Continue capstone project'
           ],
+          project: {
+            title: 'Document Q&A System',
+            description: 'RAG-powered company knowledge base that answers questions about uploaded documents'
+          },
           keyConcepts: [
             'Text embeddings and vector similarity search at scale',
             'Vector databases: ChromaDB, FAISS, Pinecone comparison',
@@ -829,38 +344,7 @@ print("\\nBUSINESS IMPACT: $500K+ annual savings with 85% auto-resolution")`
             { title: 'LangChain Documentation', url: 'https://python.langchain.com/docs/', type: 'docs' },
             { title: 'Pinecone - Vector DB Guide', url: 'https://www.pinecone.io/learn/', type: 'tutorial' },
             { title: 'ChromaDB', url: 'https://docs.trychroma.com/', type: 'docs' }
-          ],
-          exercise: {
-            id: 'ex-week11',
-            title: 'Document Q&A System',
-            description: 'Build a RAG-powered company knowledge base that answers questions about uploaded documents.',
-            starterCode: `# RAG Document Q&A System
-documents = [
-    {"title": "Return Policy", "content": "Items can be returned within 30 days..."},
-    {"title": "Shipping Info", "content": "Standard shipping takes 5-7 business days..."},
-]
-question = "How long do I have to return an item?"
-
-# TODO: Build RAG pipeline (chunk, embed, store, retrieve, augment, generate)
-`,
-            solution: `print("RAG PIPELINE:")
-print("1. CHUNK: Split documents into 500-1000 token chunks")
-print("2. EMBED: Convert to vectors with sentence-transformers")
-print("3. STORE: Save in ChromaDB/FAISS/Pinecone")
-print("4. RETRIEVE: Find top-k similar chunks for query")
-print("5. AUGMENT: Add retrieved context to prompt")
-print("6. GENERATE: LLM answers based on context only")
-
-print("\\nAugmented Prompt:")
-print('Context: "Items can be returned within 30 days..."')
-print('Question: "How long to return?"')
-print('Answer: "You have 30 days to return an item."')
-
-print("\\nVector DB Comparison:")
-print("  ChromaDB: Easy setup, local, free")
-print("  FAISS: Fast, Facebook, large scale")
-print("  Pinecone: Cloud, managed, paid")`
-          }
+          ]
         }
       ]
     },
@@ -886,8 +370,7 @@ print("  Pinecone: Cloud, managed, paid")`
             { title: 'GitHub Profile Guide', url: 'https://docs.github.com/en/account-and-profile', type: 'article' },
             { title: 'Data Science Portfolio Tips', url: 'https://www.datacamp.com/blog/how-to-build-a-data-science-portfolio', type: 'article' },
             { title: 'Kaggle Competitions', url: 'https://www.kaggle.com/competitions', type: 'tool' }
-          ],
-          exercise: null
+          ]
         }
       ]
     }
@@ -911,7 +394,7 @@ export const weekUnlockOrder = [
   'week-12'
 ];
 
-// Quizzes for each week
+// Quizzes - 10 questions each, 70% to pass (7/10)
 export const quizzes = {
   'pre-work': {
     id: 'quiz-prework',
@@ -921,8 +404,13 @@ export const quizzes = {
       { id: 'q1', question: 'What is algorithmic bias?', options: ['A type of computer virus', 'Systematic errors in AI systems that create unfair outcomes', 'A programming language', 'A hardware malfunction'], correctAnswer: 1 },
       { id: 'q2', question: 'Which is a key principle of responsible AI?', options: ['Maximizing profit at all costs', 'Hiding how AI systems make decisions', 'Transparency and explainability', 'Using data without consent'], correctAnswer: 2 },
       { id: 'q3', question: 'What is differential privacy?', options: ['A technique to protect individual data while allowing useful analysis', 'A way to make AI faster', 'A type of neural network', 'A programming framework'], correctAnswer: 0 },
-      { id: 'q4', question: 'Why is AI fairness important?', options: ['It makes code run faster', 'It ensures AI systems do not discriminate', 'It reduces costs', 'It is not important'], correctAnswer: 1 },
-      { id: 'q5', question: 'What should you do if you discover bias in your AI model?', options: ['Ignore it', 'Investigate, mitigate, and document', 'Delete the data', 'Blame others'], correctAnswer: 1 }
+      { id: 'q4', question: 'Why is AI fairness important?', options: ['It makes code run faster', 'It ensures AI systems do not discriminate against protected groups', 'It reduces server costs', 'It is not actually important'], correctAnswer: 1 },
+      { id: 'q5', question: 'What should you do if you discover bias in your AI model?', options: ['Ignore it and deploy anyway', 'Investigate the source, mitigate, and document', 'Delete all the data', 'Blame the data provider'], correctAnswer: 1 },
+      { id: 'q6', question: 'What was the issue with Amazons AI hiring tool?', options: ['It was too slow', 'It discriminated against women candidates', 'It cost too much', 'It only worked in English'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is explainability in AI?', options: ['Writing code comments', 'The ability to understand how an AI reached its decision', 'Making AI run faster', 'A type of testing'], correctAnswer: 1 },
+      { id: 'q8', question: 'Which group should be involved in AI ethics decisions?', options: ['Only engineers', 'Only executives', 'Diverse stakeholders including affected communities', 'Only the legal team'], correctAnswer: 2 },
+      { id: 'q9', question: 'What is data anonymization?', options: ['Deleting all data', 'Removing personally identifiable information', 'Encrypting databases', 'Backing up data'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is the COMPAS case study about?', options: ['Image recognition bias', 'Racial bias in criminal risk assessment AI', 'Voice assistant privacy', 'Self-driving car safety'], correctAnswer: 1 }
     ]
   },
   'week-1': {
@@ -930,11 +418,16 @@ export const quizzes = {
     title: 'What Is AI? Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is Machine Learning?', options: ['A type of robot', 'A subset of AI where systems learn from data', 'A programming language', 'A database'], correctAnswer: 1 },
+      { id: 'q1', question: 'What is Machine Learning?', options: ['A type of robot', 'A subset of AI where systems learn from data without explicit programming', 'A programming language', 'A database system'], correctAnswer: 1 },
       { id: 'q2', question: 'Which is NOT a type of machine learning?', options: ['Supervised learning', 'Unsupervised learning', 'Reinforcement learning', 'Mechanical learning'], correctAnswer: 3 },
-      { id: 'q3', question: 'What is Deep Learning?', options: ['Learning while sleeping', 'ML using neural networks with many layers', 'A database query', 'A hardware component'], correctAnswer: 1 },
-      { id: 'q4', question: 'What does "training" mean in ML?', options: ['Teaching humans', 'A model learning patterns from data', 'Installing software', 'Writing docs'], correctAnswer: 1 },
-      { id: 'q5', question: 'Which company created ChatGPT?', options: ['Google', 'Meta', 'OpenAI', 'Microsoft'], correctAnswer: 2 }
+      { id: 'q3', question: 'What is Deep Learning?', options: ['Learning while sleeping', 'Machine learning using neural networks with many layers', 'A database query technique', 'A hardware component'], correctAnswer: 1 },
+      { id: 'q4', question: 'What does training mean in ML?', options: ['Teaching humans to code', 'A model learning patterns from data', 'Installing software updates', 'Writing documentation'], correctAnswer: 1 },
+      { id: 'q5', question: 'Which company created ChatGPT?', options: ['Google', 'Meta', 'OpenAI', 'Microsoft'], correctAnswer: 2 },
+      { id: 'q6', question: 'What is supervised learning?', options: ['Learning with a human watching', 'Learning from labeled data with known outputs', 'Learning without any data', 'Learning from rewards'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is the difference between AI and ML?', options: ['They are the same thing', 'ML is a subset of AI focused on learning from data', 'AI is a subset of ML', 'They are unrelated'], correctAnswer: 1 },
+      { id: 'q8', question: 'What is generative AI?', options: ['AI that generates new content like text, images, or code', 'AI that only classifies data', 'AI used for gaming', 'AI for spreadsheets'], correctAnswer: 0 },
+      { id: 'q9', question: 'What year did the term Artificial Intelligence originate?', options: ['1936', '1956', '1976', '1996'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is unsupervised learning used for?', options: ['Classification with labels', 'Finding patterns in unlabeled data', 'Playing games', 'Web development'], correctAnswer: 1 }
     ]
   },
   'week-2': {
@@ -942,11 +435,16 @@ export const quizzes = {
     title: 'Data Thinking Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is EDA?', options: ['A programming language', 'Analyzing data sets to summarize characteristics', 'A database', 'A ML model'], correctAnswer: 1 },
-      { id: 'q2', question: 'Which is NOT a data quality issue?', options: ['Missing values', 'Duplicates', 'Data being too accurate', 'Inconsistent formatting'], correctAnswer: 2 },
-      { id: 'q3', question: 'What does the median represent?', options: ['The average', 'The most frequent value', 'The middle value when sorted', 'The range'], correctAnswer: 2 },
-      { id: 'q4', question: 'Why is data visualization important?', options: ['Makes reports longer', 'Helps identify patterns', 'Slows analysis', 'Not important'], correctAnswer: 1 },
-      { id: 'q5', question: 'What dataset is used in the Week 2 project?', options: ['MovieLens', 'Lending Club', 'IBM HR Attrition', 'MNIST'], correctAnswer: 2 }
+      { id: 'q1', question: 'What is EDA?', options: ['A programming language', 'Exploratory Data Analysis - analyzing datasets to summarize characteristics', 'A database system', 'A machine learning model'], correctAnswer: 1 },
+      { id: 'q2', question: 'Which is NOT a data quality issue?', options: ['Missing values', 'Duplicate records', 'Data being too accurate', 'Inconsistent formatting'], correctAnswer: 2 },
+      { id: 'q3', question: 'What does the median represent?', options: ['The average value', 'The most frequent value', 'The middle value when data is sorted', 'The range of values'], correctAnswer: 2 },
+      { id: 'q4', question: 'Why is data visualization important?', options: ['Makes reports longer', 'Helps identify patterns and communicate insights', 'Slows down analysis', 'Not actually important'], correctAnswer: 1 },
+      { id: 'q5', question: 'What dataset is used in the Week 2 project?', options: ['MovieLens', 'Lending Club', 'IBM HR Attrition', 'MNIST'], correctAnswer: 2 },
+      { id: 'q6', question: 'What is the difference between mean and median?', options: ['They are the same', 'Mean is the average, median is the middle value', 'Median is the average, mean is the middle', 'Neither measures central tendency'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is an outlier?', options: ['A common data point', 'A data point significantly different from others', 'A missing value', 'A duplicate record'], correctAnswer: 1 },
+      { id: 'q8', question: 'Which chart is best for showing distribution of a single variable?', options: ['Scatter plot', 'Histogram', 'Line chart', 'Pie chart'], correctAnswer: 1 },
+      { id: 'q9', question: 'What is data cleaning?', options: ['Deleting all data', 'Fixing errors, handling missing values, removing duplicates', 'Making visualizations', 'Training models'], correctAnswer: 1 },
+      { id: 'q10', question: 'What does correlation measure?', options: ['Causation between variables', 'The strength of relationship between variables', 'Data quality', 'Processing speed'], correctAnswer: 1 }
     ]
   },
   'week-3': {
@@ -956,9 +454,14 @@ export const quizzes = {
     questions: [
       { id: 'q1', question: 'What does SQL stand for?', options: ['Simple Question Language', 'Structured Query Language', 'System Quality Level', 'Standard Query Logic'], correctAnswer: 1 },
       { id: 'q2', question: 'Which SQL clause filters results?', options: ['SELECT', 'FROM', 'WHERE', 'ORDER BY'], correctAnswer: 2 },
-      { id: 'q3', question: 'What does a JOIN do?', options: ['Deletes tables', 'Combines rows from tables', 'Creates a database', 'Sorts data'], correctAnswer: 1 },
-      { id: 'q4', question: 'Which Python structure uses key-value pairs?', options: ['List', 'Tuple', 'Dictionary', 'Set'], correctAnswer: 2 },
-      { id: 'q5', question: 'What is the TechMart project transaction value?', options: ['$500K', '$1.2M', '$2.4M', '$5M'], correctAnswer: 2 }
+      { id: 'q3', question: 'What does a JOIN do in SQL?', options: ['Deletes tables', 'Combines rows from two or more tables', 'Creates a new database', 'Sorts data alphabetically'], correctAnswer: 1 },
+      { id: 'q4', question: 'Which Python data structure uses key-value pairs?', options: ['List', 'Tuple', 'Dictionary', 'Set'], correctAnswer: 2 },
+      { id: 'q5', question: 'What is the TechMart project transaction value?', options: ['$500K', '$1.2M', '$2.4M', '$5M'], correctAnswer: 2 },
+      { id: 'q6', question: 'What does GROUP BY do in SQL?', options: ['Sorts results', 'Filters rows', 'Aggregates data by categories', 'Joins tables'], correctAnswer: 2 },
+      { id: 'q7', question: 'What is a CTE in SQL?', options: ['Common Table Expression - a temporary named result set', 'Column Type Extension', 'Central Table Entity', 'Custom Text Encoding'], correctAnswer: 0 },
+      { id: 'q8', question: 'Which Python library is used for data manipulation?', options: ['NumPy', 'Pandas', 'Matplotlib', 'Scikit-learn'], correctAnswer: 1 },
+      { id: 'q9', question: 'What does SELECT * mean?', options: ['Select nothing', 'Select all columns', 'Select the first row', 'Delete all data'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is a window function in SQL?', options: ['A function that opens windows', 'A function that performs calculations across rows related to current row', 'A function for creating views', 'A function for deleting data'], correctAnswer: 1 }
     ]
   },
   'week-4': {
@@ -966,11 +469,16 @@ export const quizzes = {
     title: 'Regression Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is linear regression used for?', options: ['Classification', 'Predicting continuous values', 'Clustering', 'Image recognition'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is a "feature" in ML?', options: ['The output', 'An input variable for prediction', 'An algorithm', 'A visualization'], correctAnswer: 1 },
-      { id: 'q3', question: 'What metric evaluates regression models?', options: ['Accuracy', 'RMSE', 'F1 Score', 'Precision'], correctAnswer: 1 },
-      { id: 'q4', question: 'What does the Lending Club Part A predict?', options: ['Defaults', 'Interest rates', 'Customer satisfaction', 'Stock prices'], correctAnswer: 1 },
-      { id: 'q5', question: 'What does a negative coefficient mean?', options: ['Model failed', 'As feature increases, target decreases', 'Feature not important', 'Error'], correctAnswer: 1 }
+      { id: 'q1', question: 'What is linear regression used for?', options: ['Classification tasks', 'Predicting continuous numerical values', 'Clustering data', 'Image recognition'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is a feature in machine learning?', options: ['The output we want to predict', 'An input variable used for prediction', 'A type of algorithm', 'A visualization technique'], correctAnswer: 1 },
+      { id: 'q3', question: 'Which metric is commonly used to evaluate regression models?', options: ['Accuracy', 'RMSE (Root Mean Squared Error)', 'F1 Score', 'Precision'], correctAnswer: 1 },
+      { id: 'q4', question: 'What does the Lending Club Part A project predict?', options: ['Loan defaults', 'Interest rates', 'Customer satisfaction', 'Stock prices'], correctAnswer: 1 },
+      { id: 'q5', question: 'What does a negative coefficient mean in linear regression?', options: ['The model failed', 'As the feature increases, the target decreases', 'The feature is not important', 'There is an error in the data'], correctAnswer: 1 },
+      { id: 'q6', question: 'What is R-squared?', options: ['A programming language', 'A measure of how well the model explains variance in the target', 'A type of neural network', 'A data cleaning technique'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is feature engineering?', options: ['Building computer hardware', 'Creating or transforming features to improve model performance', 'A type of testing', 'Database design'], correctAnswer: 1 },
+      { id: 'q8', question: 'What is the target variable?', options: ['The input features', 'The variable we want to predict', 'The training data', 'The test data'], correctAnswer: 1 },
+      { id: 'q9', question: 'What is multicollinearity?', options: ['Multiple models', 'High correlation between independent variables', 'A type of neural network', 'A visualization'], correctAnswer: 1 },
+      { id: 'q10', question: 'What library provides LinearRegression in Python?', options: ['Pandas', 'NumPy', 'Scikit-learn', 'TensorFlow'], correctAnswer: 2 }
     ]
   },
   'week-5': {
@@ -978,35 +486,50 @@ export const quizzes = {
     title: 'Classification Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is classification for?', options: ['Predicting continuous values', 'Predicting categorical outcomes', 'Grouping data', 'Reducing dimensions'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is a Random Forest?', options: ['A single tree', 'An ensemble of decision trees', 'A data type', 'A visualization'], correctAnswer: 1 },
-      { id: 'q3', question: 'What does AUC-ROC measure?', options: ['Speed', 'Classification performance across thresholds', 'Data size', 'Feature importance'], correctAnswer: 1 },
-      { id: 'q4', question: 'How much does each prevented default save?', options: ['$1,000', '$5,000', '$9,000', '$50,000'], correctAnswer: 2 },
-      { id: 'q5', question: 'What is class imbalance?', options: ['Different feature scales', 'One class much more frequent', 'Complex models', 'Missing data'], correctAnswer: 1 }
+      { id: 'q1', question: 'What is classification used for?', options: ['Predicting continuous values', 'Predicting categorical outcomes', 'Grouping unlabeled data', 'Reducing dimensions'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is a Random Forest?', options: ['A single decision tree', 'An ensemble of many decision trees', 'A type of data', 'A visualization tool'], correctAnswer: 1 },
+      { id: 'q3', question: 'What does AUC-ROC measure?', options: ['Processing speed', 'Classification performance across all thresholds', 'Data size', 'Feature importance only'], correctAnswer: 1 },
+      { id: 'q4', question: 'How much does each prevented default save in the project?', options: ['$1,000', '$5,000', '$9,000', '$50,000'], correctAnswer: 2 },
+      { id: 'q5', question: 'What is class imbalance?', options: ['Different feature scales', 'One class being much more frequent than others', 'Complex model architecture', 'Missing data in classes'], correctAnswer: 1 },
+      { id: 'q6', question: 'What is logistic regression used for?', options: ['Regression problems', 'Binary classification problems', 'Clustering', 'Dimensionality reduction'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is precision in classification?', options: ['The proportion of true positives among predicted positives', 'The proportion of true positives among actual positives', 'Overall accuracy', 'Processing time'], correctAnswer: 0 },
+      { id: 'q8', question: 'What is recall in classification?', options: ['The proportion of true positives among predicted positives', 'The proportion of true positives among actual positives', 'Overall accuracy', 'Memory usage'], correctAnswer: 1 },
+      { id: 'q9', question: 'What technique helps with class imbalance?', options: ['Removing all minority class samples', 'SMOTE (Synthetic Minority Oversampling)', 'Using only accuracy metric', 'Ignoring the problem'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is a decision boundary?', options: ['The edge of a dataset', 'The line or surface separating different classes', 'A type of error', 'A preprocessing step'], correctAnswer: 1 }
     ]
   },
   'week-6': {
     id: 'quiz-week6',
-    title: 'Model Evaluation Quiz',
+    title: 'Model Evaluation & Deployment Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is overfitting?', options: ['Good performance on new data', 'Learning noise, poor on new data', 'Too simple model', 'Long training'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is cross-validation for?', options: ['Cleaning data', 'Evaluating model robustly', 'Visualization', 'Faster training'], correctAnswer: 1 },
-      { id: 'q3', question: 'When prioritize recall over precision?', options: ['False positives costly', 'False negatives costly', 'Always', 'Never'], correctAnswer: 1 },
-      { id: 'q4', question: 'What is Streamlit for?', options: ['Training models', 'Building web applications', 'Data cleaning', 'Database management'], correctAnswer: 1 },
-      { id: 'q5', question: 'What does a confusion matrix show?', options: ['Parameters', 'Predictions vs actuals (TP, TN, FP, FN)', 'Training time', 'Correlations'], correctAnswer: 1 }
+      { id: 'q1', question: 'What is overfitting?', options: ['Good performance on new data', 'Model learns noise, performs poorly on new data', 'Model is too simple', 'Training takes too long'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is cross-validation used for?', options: ['Cleaning data', 'Evaluating model performance more robustly', 'Creating visualizations', 'Faster training'], correctAnswer: 1 },
+      { id: 'q3', question: 'When should you prioritize recall over precision?', options: ['When false positives are very costly', 'When false negatives are very costly', 'Always', 'Never'], correctAnswer: 1 },
+      { id: 'q4', question: 'What is Streamlit used for?', options: ['Training ML models', 'Building interactive web applications', 'Data cleaning', 'Database management'], correctAnswer: 1 },
+      { id: 'q5', question: 'What does a confusion matrix show?', options: ['Model parameters', 'Predictions vs actual values (TP, TN, FP, FN)', 'Training time', 'Feature correlations'], correctAnswer: 1 },
+      { id: 'q6', question: 'What is k-fold cross-validation?', options: ['Training k different models', 'Splitting data into k parts and rotating the test set', 'Using k features', 'Running for k iterations'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is hyperparameter tuning?', options: ['Adjusting model weights', 'Finding optimal configuration settings for the model', 'Cleaning the data', 'Feature engineering'], correctAnswer: 1 },
+      { id: 'q8', question: 'What is model serialization?', options: ['Training in parallel', 'Saving a trained model to disk for later use', 'Data preprocessing', 'Feature selection'], correctAnswer: 1 },
+      { id: 'q9', question: 'What is the train-test split for?', options: ['Making training faster', 'Evaluating model on unseen data', 'Reducing data size', 'Data visualization'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is underfitting?', options: ['Model is too complex', 'Model is too simple to capture patterns', 'Training takes too long', 'Perfect model performance'], correctAnswer: 1 }
     ]
   },
   'week-7': {
     id: 'quiz-week7',
-    title: 'Unsupervised & Recommendations Quiz',
+    title: 'Unsupervised Learning & Recommendations Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is clustering?', options: ['Predicting labels', 'Grouping similar data points', 'Training NNs', 'Visualization'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is collaborative filtering?', options: ['Filtering spam', 'Recommending based on similar users', 'Cleaning data', 'A clustering method'], correctAnswer: 1 },
-      { id: 'q3', question: 'What is the cold start problem?', options: ['Servers too cold', 'Difficulty with new users/items with no history', 'Slow computation', 'Storage issues'], correctAnswer: 1 },
-      { id: 'q4', question: 'What dataset is used in Week 7?', options: ['Lending Club', 'MovieLens 100K', 'IBM HR', 'MNIST'], correctAnswer: 1 },
-      { id: 'q5', question: 'What does PCA stand for?', options: ['Primary Component Analysis', 'Principal Component Analysis', 'Partial Cluster Algorithm', 'Predictive Classification'], correctAnswer: 1 }
+      { id: 'q1', question: 'What is clustering?', options: ['Predicting labels', 'Grouping similar data points together', 'Training neural networks', 'Creating visualizations'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is collaborative filtering?', options: ['Filtering spam emails', 'Recommending items based on similar users or items', 'Cleaning data', 'A clustering method'], correctAnswer: 1 },
+      { id: 'q3', question: 'What is the cold start problem?', options: ['Servers being too cold', 'Difficulty recommending for new users or items with no history', 'Slow computation', 'Storage limitations'], correctAnswer: 1 },
+      { id: 'q4', question: 'What dataset is used in the Week 7 project?', options: ['Lending Club', 'MovieLens 100K', 'IBM HR Attrition', 'MNIST'], correctAnswer: 1 },
+      { id: 'q5', question: 'What does PCA stand for?', options: ['Primary Component Analysis', 'Principal Component Analysis', 'Partial Cluster Algorithm', 'Predictive Classification Approach'], correctAnswer: 1 },
+      { id: 'q6', question: 'What is K-Means clustering?', options: ['A classification algorithm', 'An algorithm that partitions data into k clusters', 'A regression technique', 'A neural network type'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is cosine similarity used for?', options: ['Measuring angle-based similarity between vectors', 'Calculating distances', 'Training models', 'Data cleaning'], correctAnswer: 0 },
+      { id: 'q8', question: 'What is content-based filtering?', options: ['Filtering by file type', 'Recommending based on item attributes and features', 'Removing content', 'A clustering method'], correctAnswer: 1 },
+      { id: 'q9', question: 'What is matrix factorization (SVD) used for in recommendations?', options: ['Data cleaning', 'Decomposing user-item matrix to find latent factors', 'Visualization', 'Classification'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is the elbow method?', options: ['A physical exercise', 'A technique to find optimal number of clusters', 'A data cleaning method', 'A visualization type'], correctAnswer: 1 }
     ]
   },
   'week-8': {
@@ -1014,11 +537,16 @@ export const quizzes = {
     title: 'Neural Networks Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is an activation function?', options: ['Starts training', 'Introduces non-linearity', 'Loads data', 'Calculates loss'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is backpropagation?', options: ['Moving data backwards', 'Calculating gradients to update weights', 'A NN type', 'Preprocessing'], correctAnswer: 1 },
-      { id: 'q3', question: 'Cost of missed heart disease diagnosis?', options: ['$5K', '$25K', '$75K', '$500K'], correctAnswer: 2 },
-      { id: 'q4', question: 'When choose NN over logistic regression?', options: ['Small data, linear', 'Large data, complex patterns', 'Always', 'Never'], correctAnswer: 1 },
-      { id: 'q5', question: 'What does ReLU do?', options: ['Returns input if positive, else 0', 'Squashes to 0-1', 'Normalizes', 'Calculates loss'], correctAnswer: 0 }
+      { id: 'q1', question: 'What is an activation function?', options: ['Starts the training process', 'Introduces non-linearity to neural networks', 'Loads the data', 'Calculates the loss'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is backpropagation?', options: ['Moving data backwards', 'Algorithm for calculating gradients to update weights', 'A type of neural network', 'Data preprocessing'], correctAnswer: 1 },
+      { id: 'q3', question: 'What is the cost of a missed heart disease diagnosis in the project?', options: ['$5K', '$25K', '$75K', '$500K'], correctAnswer: 2 },
+      { id: 'q4', question: 'When should you choose a neural network over logistic regression?', options: ['Small data, linear relationships', 'Large data, complex non-linear patterns', 'Always', 'Never'], correctAnswer: 1 },
+      { id: 'q5', question: 'What does ReLU activation do?', options: ['Returns input if positive, otherwise 0', 'Squashes values to 0-1', 'Normalizes data', 'Calculates loss'], correctAnswer: 0 },
+      { id: 'q6', question: 'What is a hidden layer?', options: ['A layer that is not visible in code', 'A layer between input and output layers', 'The output layer', 'The input layer'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is gradient descent?', options: ['A type of layer', 'An optimization algorithm to minimize loss', 'A data preprocessing step', 'A visualization technique'], correctAnswer: 1 },
+      { id: 'q8', question: 'What is the purpose of a loss function?', options: ['To add more layers', 'To measure how wrong predictions are', 'To load data', 'To visualize results'], correctAnswer: 1 },
+      { id: 'q9', question: 'What framework is commonly used for neural networks?', options: ['Pandas', 'Scikit-learn', 'Keras and TensorFlow', 'Matplotlib'], correctAnswer: 2 },
+      { id: 'q10', question: 'What is an epoch?', options: ['A single data point', 'One complete pass through the training data', 'A type of layer', 'An activation function'], correctAnswer: 1 }
     ]
   },
   'week-9': {
@@ -1026,11 +554,16 @@ export const quizzes = {
     title: 'Deep Learning Applications Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is a CNN for?', options: ['Text', 'Image/visual data', 'Time series', 'Recommendations'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is transfer learning?', options: ['Moving data', 'Using pre-trained model for new task', 'Data augmentation', 'File transfer'], correctAnswer: 1 },
-      { id: 'q3', question: 'Why freeze base layers?', options: ['Faster training, preserve features', 'Increase model size', 'Add more data', 'Visualization'], correctAnswer: 0 },
-      { id: 'q4', question: 'What did Transformers replace RNNs with?', options: ['Convolutions', 'Self-attention', 'Pooling', 'Dropout'], correctAnswer: 1 },
-      { id: 'q5', question: 'Transfer learning training time reduction?', options: ['10-20%', '30-50%', '80-90%', 'No reduction'], correctAnswer: 2 }
+      { id: 'q1', question: 'What is a CNN primarily used for?', options: ['Text processing', 'Image and visual data processing', 'Time series only', 'Recommendations'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is transfer learning?', options: ['Moving data between servers', 'Using a pre-trained model for a new task', 'Data augmentation', 'File transfer'], correctAnswer: 1 },
+      { id: 'q3', question: 'Why freeze base layers in transfer learning?', options: ['To train faster and preserve learned features', 'To increase model size', 'To add more data', 'For visualization'], correctAnswer: 0 },
+      { id: 'q4', question: 'What did Transformers replace in sequence modeling?', options: ['Convolutions', 'RNNs and LSTMs with self-attention', 'Pooling layers', 'Dropout'], correctAnswer: 1 },
+      { id: 'q5', question: 'How much training time reduction does transfer learning provide?', options: ['10-20%', '30-50%', '80% or more reduction', 'No reduction'], correctAnswer: 2 },
+      { id: 'q6', question: 'What is a convolutional layer?', options: ['A layer that applies filters to detect features', 'A fully connected layer', 'An output layer', 'A dropout layer'], correctAnswer: 0 },
+      { id: 'q7', question: 'What is data augmentation?', options: ['Deleting data', 'Creating variations of training data to increase dataset size', 'Data cleaning', 'Feature selection'], correctAnswer: 1 },
+      { id: 'q8', question: 'What is VGG16?', options: ['A database', 'A pre-trained CNN model for image classification', 'A programming language', 'A loss function'], correctAnswer: 1 },
+      { id: 'q9', question: 'What problem do LSTMs solve that basic RNNs struggle with?', options: ['Image processing', 'Long-range dependencies and vanishing gradient', 'Fast training', 'Small datasets'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is attention mechanism in deep learning?', options: ['User attention tracking', 'Allowing models to focus on relevant parts of input', 'A regularization technique', 'A loss function'], correctAnswer: 1 }
     ]
   },
   'week-10': {
@@ -1038,11 +571,16 @@ export const quizzes = {
     title: 'LLMs & Prompt Engineering Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What is tokenization?', options: ['Encrypting data', 'Breaking text into smaller units', 'Training', 'Visualization'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is an LLM hallucination?', options: ['Visual effect', 'Generating false information', 'Training technique', 'Architecture type'], correctAnswer: 1 },
-      { id: 'q3', question: 'What is chain-of-thought prompting?', options: ['Linking models', 'Asking AI to reason step-by-step', 'Database technique', 'Visualization'], correctAnswer: 1 },
-      { id: 'q4', question: 'LLM Customer Support potential savings?', options: ['$50K', '$100K', '$500K+', '$1M+'], correctAnswer: 2 },
-      { id: 'q5', question: 'Who created Claude?', options: ['OpenAI', 'Google', 'Anthropic', 'Meta'], correctAnswer: 2 }
+      { id: 'q1', question: 'What is tokenization?', options: ['Encrypting data', 'Breaking text into smaller units called tokens', 'Model training', 'Data visualization'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is an LLM hallucination?', options: ['A visual effect', 'When an LLM generates false or fabricated information', 'A training technique', 'A type of architecture'], correctAnswer: 1 },
+      { id: 'q3', question: 'What is chain-of-thought prompting?', options: ['Linking multiple models', 'Asking the AI to reason step-by-step', 'A database technique', 'Data visualization'], correctAnswer: 1 },
+      { id: 'q4', question: 'What is the potential annual savings in the LLM Customer Support project?', options: ['$50K', '$100K', '$500K or more', '$10M'], correctAnswer: 2 },
+      { id: 'q5', question: 'Who created Claude?', options: ['OpenAI', 'Google', 'Anthropic', 'Meta'], correctAnswer: 2 },
+      { id: 'q6', question: 'What is zero-shot prompting?', options: ['Training from scratch', 'Asking the model to perform a task without examples', 'Using zero data', 'A fine-tuning method'], correctAnswer: 1 },
+      { id: 'q7', question: 'What is few-shot prompting?', options: ['Using very little data for training', 'Providing a few examples in the prompt', 'Running for few iterations', 'A compression technique'], correctAnswer: 1 },
+      { id: 'q8', question: 'What does temperature control in LLMs?', options: ['Server cooling', 'Randomness and creativity of outputs', 'Training speed', 'Model size'], correctAnswer: 1 },
+      { id: 'q9', question: 'What is a knowledge cutoff in LLMs?', options: ['Data deletion', 'The date after which the model has no training data', 'Model size limit', 'Token limit'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is the recommended prompt structure?', options: ['Just ask the question', 'ROLE then CONTEXT then TASK then FORMAT then CONSTRAINTS', 'Use only keywords', 'Write in code'], correctAnswer: 1 }
     ]
   },
   'week-11': {
@@ -1050,11 +588,16 @@ export const quizzes = {
     title: 'RAG & Agentic AI Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What does RAG stand for?', options: ['Random Access Generation', 'Retrieval Augmented Generation', 'Rapid AI Growth', 'Recursive Algorithm'], correctAnswer: 1 },
-      { id: 'q2', question: 'What is a vector database for in RAG?', options: ['Storing images', 'Storing/searching text embeddings', 'SQL queries', 'Training'], correctAnswer: 1 },
-      { id: 'q3', question: 'Typical chunk size for RAG?', options: ['50-100', '500-1000', '5000-10000', 'Entire documents'], correctAnswer: 1 },
+      { id: 'q1', question: 'What does RAG stand for?', options: ['Random Access Generation', 'Retrieval Augmented Generation', 'Rapid AI Growth', 'Recursive Algorithm Generation'], correctAnswer: 1 },
+      { id: 'q2', question: 'What is a vector database used for in RAG?', options: ['Storing images only', 'Storing and searching text embeddings efficiently', 'Running SQL queries', 'Training models'], correctAnswer: 1 },
+      { id: 'q3', question: 'What is the typical chunk size for RAG documents?', options: ['50-100 tokens', '500-1000 tokens', '5000-10000 tokens', 'Entire documents'], correctAnswer: 1 },
       { id: 'q4', question: 'Which is NOT a vector database?', options: ['ChromaDB', 'FAISS', 'Pinecone', 'PostgreSQL'], correctAnswer: 3 },
-      { id: 'q5', question: 'What is an AI agent?', options: ['Human using AI', 'AI that takes actions/uses tools autonomously', 'A database', 'An algorithm'], correctAnswer: 1 }
+      { id: 'q5', question: 'What is an AI agent?', options: ['A human using AI', 'AI that can take actions and use tools autonomously', 'A database system', 'A visualization tool'], correctAnswer: 1 },
+      { id: 'q6', question: 'What are embeddings?', options: ['HTML elements', 'Dense vector representations of text or data', 'Database indexes', 'Image files'], correctAnswer: 1 },
+      { id: 'q7', question: 'Why is RAG useful?', options: ['Makes models smaller', 'Allows LLMs to access external and updated knowledge', 'Speeds up training', 'Reduces cost only'], correctAnswer: 1 },
+      { id: 'q8', question: 'What is LangChain?', options: ['A blockchain', 'A framework for building LLM applications', 'A database', 'A programming language'], correctAnswer: 1 },
+      { id: 'q9', question: 'What is the RAG pipeline order?', options: ['Generate then Retrieve then Augment', 'Retrieve then Augment then Generate', 'Augment then Generate then Retrieve', 'Random order'], correctAnswer: 1 },
+      { id: 'q10', question: 'What is function calling in Agentic AI?', options: ['Calling Python functions', 'LLMs invoking external tools and APIs to take actions', 'Phone calls', 'Debugging'], correctAnswer: 1 }
     ]
   },
   'week-12': {
@@ -1062,11 +605,16 @@ export const quizzes = {
     title: 'Capstone & Career Quiz',
     passingScore: 70,
     questions: [
-      { id: 'q1', question: 'What should a good portfolio include?', options: ['Only code', 'Projects with documentation and business impact', 'Only certifications', 'Personal photos'], correctAnswer: 1 },
-      { id: 'q2', question: 'Why is GitHub important?', options: ['Social media', 'Showcasing code, collaboration, version control', 'Storing files', 'Watching videos'], correctAnswer: 1 },
-      { id: 'q3', question: 'Junior Data Scientist salary range?', options: ['$30K-$50K', '$88K-$110K', '$200K-$300K', '$500K+'], correctAnswer: 1 },
-      { id: 'q4', question: 'What to emphasize in interviews?', options: ['Memorized definitions', 'Problem-solving and communication', 'Typing speed', 'Certifications count'], correctAnswer: 1 },
-      { id: 'q5', question: 'How many portfolio projects in this bootcamp?', options: ['5', '8', '11', '15'], correctAnswer: 2 }
+      { id: 'q1', question: 'What should a good data science portfolio include?', options: ['Only code files', 'Projects with documentation, business impact, and clean code', 'Only certifications', 'Personal photos'], correctAnswer: 1 },
+      { id: 'q2', question: 'Why is GitHub important for data scientists?', options: ['Social media presence', 'Showcasing code, collaboration, and version control', 'Storing personal files', 'Watching videos'], correctAnswer: 1 },
+      { id: 'q3', question: 'What is the typical Data Scientist salary range?', options: ['$30K-$50K', '$88K-$110K', '$200K-$300K', '$500K or more'], correctAnswer: 1 },
+      { id: 'q4', question: 'What should you emphasize in data science interviews?', options: ['Memorized definitions only', 'Problem-solving approach and communication skills', 'Typing speed', 'Number of certifications'], correctAnswer: 1 },
+      { id: 'q5', question: 'How many portfolio projects are in this bootcamp?', options: ['5', '8', '11', '15'], correctAnswer: 1 },
+      { id: 'q6', question: 'What is the STAR method for interviews?', options: ['A rating system', 'Situation, Task, Action, Result for answering behavioral questions', 'A programming framework', 'A data visualization'], correctAnswer: 1 },
+      { id: 'q7', question: 'What should a good README include?', options: ['Just the code', 'Project overview, setup instructions, results, and documentation', 'Only images', 'Personal information'], correctAnswer: 1 },
+      { id: 'q8', question: 'How long should the capstone presentation be?', options: ['5 minutes', '10 minutes', '30 minutes', '1 hour'], correctAnswer: 1 },
+      { id: 'q9', question: 'What makes a capstone project stand out?', options: ['Using the most complex algorithm', 'Clear business impact and practical application', 'Length of code', 'Number of libraries used'], correctAnswer: 1 },
+      { id: 'q10', question: 'Why is continuous learning important in AI and ML?', options: ['It is not important', 'The field evolves rapidly with new techniques and tools', 'To get more certifications', 'To impress recruiters'], correctAnswer: 1 }
     ]
   }
 };
@@ -1086,16 +634,15 @@ export const getTotalWeeks = () => getAllWeeks().length;
 
 export const getWeekIndex = (weekId) => weekUnlockOrder.indexOf(weekId);
 
-export const isWeekUnlocked = (weekId, completedQuizzes, completedExercises) => {
+// Simplified unlock logic - only requires quiz completion (no exercises)
+export const isWeekUnlocked = (weekId, completedQuizzes) => {
   const weekIndex = getWeekIndex(weekId);
   if (weekIndex <= 1) return true; // Pre-work and Week 1 always unlocked
   
+  // Check all previous weeks have passed quizzes
   for (let i = 0; i < weekIndex; i++) {
     const prevWeekId = weekUnlockOrder[i];
     if (!completedQuizzes[prevWeekId]) return false;
-    
-    const prevWeek = getAllWeeks().find(w => w.id === prevWeekId);
-    if (prevWeek?.exercise && !completedExercises[prevWeek.exercise.id]) return false;
   }
   return true;
 };

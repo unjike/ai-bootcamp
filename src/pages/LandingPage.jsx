@@ -4,8 +4,11 @@ import {
   Brain, ChevronRight, CheckCircle2, Clock, Users, Award, 
   Code, Database, BarChart3, Cpu, MessageSquare, Sparkles,
   BookOpen, Target, TrendingUp, DollarSign, Calendar, ArrowRight,
-  ChevronDown, Star, Briefcase, GraduationCap, Zap
+  ChevronDown, Star, Briefcase, GraduationCap, Zap, MessageCircle
 } from 'lucide-react';
+
+// WhatsApp URL
+const WHATSAPP_URL = "https://api.whatsapp.com/send/?phone=13017682721&text=Hello%2C+tell+me+more+about+your+AI+bootcamp";
 
 // Skill Badge Component
 const SkillBadge = ({ icon: Icon, label, color }) => (
@@ -183,6 +186,17 @@ export default function LandingPage() {
                 className="px-8 py-4 bg-white text-gray-700 font-semibold rounded-xl border border-gray-200 hover:border-emerald-300 hover:text-emerald-600 transition-all flex items-center justify-center gap-2"
               >
                 View Curriculum <ChevronDown className="w-5 h-5" />
+              </a>
+            </div>
+            <div className="mt-4">
+              <a 
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span>Questions? Chat with us on WhatsApp</span>
               </a>
             </div>
           </div>
@@ -366,12 +380,23 @@ export default function LandingPage() {
             Join the next generation of data scientists and AI engineers. 
             Your future in AI starts today.
           </p>
-          <button 
-            onClick={() => navigate('/login')}
-            className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 mx-auto"
-          >
-            Get Started Now <ArrowRight className="w-5 h-5" />
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button 
+              onClick={() => navigate('/login')}
+              className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2"
+            >
+              Get Started Now <ArrowRight className="w-5 h-5" />
+            </button>
+            <a 
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 bg-transparent text-white font-semibold rounded-xl border border-gray-600 hover:border-emerald-500 hover:text-emerald-400 transition-all flex items-center justify-center gap-2"
+            >
+              <MessageCircle className="w-5 h-5" />
+              Chat on WhatsApp
+            </a>
+          </div>
           <p className="mt-6 text-gray-400 text-sm">Free to start • No credit card required</p>
         </div>
       </section>

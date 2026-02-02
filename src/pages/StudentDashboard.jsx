@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Brain, ChevronDown, ChevronRight, CheckCircle2, Circle, BookOpen, 
   Link, Clock, Target, Sparkles, RotateCcw, LogOut,
-  Lock, Unlock, HelpCircle, Award, TrendingUp, X, Trophy
+  Lock, Unlock, HelpCircle, Award, TrendingUp, X
 } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
 import { 
@@ -603,19 +603,6 @@ export default function StudentDashboard() {
         {/* Content */}
         {activeTab === 'curriculum' && (
           <div className="space-y-6">
-            {/* Target Roles Banner */}
-            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl p-4 text-white">
-              <div className="flex items-start gap-3">
-                <Trophy className="w-6 h-6 flex-shrink-0 mt-0.5" />
-                <div>
-                  <h3 className="font-semibold">Target Roles After Completion</h3>
-                  <p className="text-sm opacity-90 mt-1">
-                    Junior Data Scientist ($88-110K) • Data Analyst ($57-75K) • Junior ML Analyst ($90-103K)
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Unlock Progress Info */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex items-start gap-3">

@@ -25,10 +25,9 @@ const formatDate = (dateString) => {
 
 const StudentRow = ({ student, onClick, isExpanded }) => {
   const totalWeeks = getTotalWeeks();
-  const completedWeeks = student.progress?.filter(p => p.completed).length || 0;
-  const progressPercent = Math.round((completedWeeks / totalWeeks) * 100);
-  const totalTime = student.time_logs?.reduce((sum, log) => sum + log.seconds_spent, 0) || 0;
   const quizzesPassed = student.quiz_results?.filter(q => q.passed).length || 0;
+  const progressPercent = Math.round((quizzesPassed / totalWeeks) * 100);
+  const totalTime = student.time_logs?.reduce((sum, log) => sum + log.seconds_spent, 0) || 0;
   
   const getStatusColor = () => {
     if (progressPercent >= 75) return 'text-emerald-600 bg-emerald-100';
@@ -58,7 +57,7 @@ const StudentRow = ({ student, onClick, isExpanded }) => {
           <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${getStatusColor()}`}>{progressPercent}%</span>
         </div>
       </td>
-      <td className="px-4 py-3 text-sm text-gray-600">{completedWeeks}/{totalWeeks} weeks</td>
+      <td className="px-4 py-3 text-sm text-gray-600">{quizzesPassed}/{totalWeeks} weeks</td>
       <td className="px-4 py-3 text-sm text-gray-600">{formatTime(totalTime)}</td>
       <td className="px-4 py-3 text-sm text-gray-600">{quizzesPassed}/{totalWeeks} passed</td>
       <td className="px-4 py-3 text-sm text-gray-500">{formatDate(student.created_at)}</td>
@@ -71,7 +70,6 @@ const StudentRow = ({ student, onClick, isExpanded }) => {
 
 const StudentDetailPanel = ({ student }) => {
   const allWeeks = getAllWeeks();
-  const completedWeekIds = new Set(student.progress?.filter(p => p.completed).map(p => p.week_id) || []);
   const quizResults = student.quiz_results || [];
   const quizResultsMap = {};
   quizResults.forEach(q => { quizResultsMap[q.week_id] = q; });
@@ -97,14 +95,15 @@ const StudentDetailPanel = ({ student }) => {
             <div className="space-y-1 max-h-64 overflow-y-auto">
               {allWeeks.map(week => {
                 const quizResult = quizResultsMap[week.id];
+                const quizPassed = quizResult?.passed;
                 return (
                   <div key={week.id} className="flex items-center gap-2 text-sm">
-                    {completedWeekIds.has(week.id) ? (
+                    {quizPassed ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     ) : (
                       <XCircle className="w-4 h-4 text-gray-300 flex-shrink-0" />
                     )}
-                    <span className={completedWeekIds.has(week.id) ? 'text-gray-700' : 'text-gray-400'}>{week.title}</span>
+                    <span className={quizPassed ? 'text-gray-700' : 'text-gray-400'}>{week.title}</span>
                     {quizResult && (
                       <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${quizResult.passed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                         Quiz: {quizResult.score}%
@@ -222,19 +221,18 @@ export default function AdminDashboard() {
   }).length;
 
   const progressDistribution = [
-    { name: '0-25%', value: students.filter(s => { const p = (s.progress?.filter(x => x.completed).length || 0) / totalWeeks * 100; return p >= 0 && p < 25; }).length, color: '#ef4444' },
-    { name: '25-50%', value: students.filter(s => { const p = (s.progress?.filter(x => x.completed).length || 0) / totalWeeks * 100; return p >= 25 && p < 50; }).length, color: '#f59e0b' },
-    { name: '50-75%', value: students.filter(s => { const p = (s.progress?.filter(x => x.completed).length || 0) / totalWeeks * 100; return p >= 50 && p < 75; }).length, color: '#3b82f6' },
-    { name: '75-100%', value: students.filter(s => { const p = (s.progress?.filter(x => x.completed).length || 0) / totalWeeks * 100; return p >= 75; }).length, color: '#10b981' },
+    { name: '0-25%', value: students.filter(s => { const p = (s.quiz_results?.filter(q => q.passed).length || 0) / totalWeeks * 100; return p >= 0 && p < 25; }).length, color: '#ef4444' },
+    { name: '25-50%', value: students.filter(s => { const p = (s.quiz_results?.filter(q => q.passed).length || 0) / totalWeeks * 100; return p >= 25 && p < 50; }).length, color: '#f59e0b' },
+    { name: '50-75%', value: students.filter(s => { const p = (s.quiz_results?.filter(q => q.passed).length || 0) / totalWeeks * 100; return p >= 50 && p < 75; }).length, color: '#3b82f6' },
+    { name: '75-100%', value: students.filter(s => { const p = (s.quiz_results?.filter(q => q.passed).length || 0) / totalWeeks * 100; return p >= 75; }).length, color: '#10b981' },
   ].filter(d => d.value > 0);
 
   const exportCSV = () => {
-    const headers = ['Name', 'Email', 'Progress %', 'Weeks Completed', 'Time Spent', 'Quizzes Passed', 'Joined'];
+    const headers = ['Name', 'Email', 'Progress %', 'Quizzes Passed', 'Time Spent', 'Joined'];
     const rows = students.map(s => {
-      const completed = s.progress?.filter(p => p.completed).length || 0;
       const time = s.time_logs?.reduce((sum, log) => sum + log.seconds_spent, 0) || 0;
       const quizzesPassed = s.quiz_results?.filter(q => q.passed).length || 0;
-      return [s.full_name || '', s.email, Math.round((completed / totalWeeks) * 100), completed, formatTime(time), quizzesPassed, formatDate(s.created_at)];
+      return [s.full_name || '', s.email, Math.round((quizzesPassed / totalWeeks) * 100), quizzesPassed, formatTime(time), formatDate(s.created_at)];
     });
     const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -337,14 +335,14 @@ export default function AdminDashboard() {
           </div>
 
           <div className="bg-white rounded-xl p-4 border shadow-sm">
-            <h3 className="font-semibold text-gray-800 mb-4">Completion by Week</h3>
+            <h3 className="font-semibold text-gray-800 mb-4">Quiz Completion by Week</h3>
             <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={getAllWeeks().slice(0, 8).map(week => ({
+              <BarChart data={getAllWeeks().map(week => ({
                 name: week.id.replace('week-', 'W').replace('pre-work', 'Pre'),
-                completed: students.filter(s => s.progress?.some(p => p.week_id === week.id && p.completed)).length
+                completed: students.filter(s => s.quiz_results?.some(q => q.week_id === week.id && q.passed)).length
               }))}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                <XAxis dataKey="name" tick={{ fontSize: 10 }} interval={0} />
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Bar dataKey="completed" fill="#10b981" radius={[4, 4, 0, 0]} />

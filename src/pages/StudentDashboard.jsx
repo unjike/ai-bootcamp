@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Brain, ChevronDown, ChevronRight, CheckCircle2, Circle, BookOpen, 
   Link, Clock, Target, Sparkles, RotateCcw, LogOut,
-  Lock, Unlock, HelpCircle, Award, TrendingUp, X
+  Lock, Unlock, HelpCircle, Award, TrendingUp, X, Trophy
 } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
 import { 

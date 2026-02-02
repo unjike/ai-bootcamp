@@ -28,7 +28,6 @@ const StudentRow = ({ student, onClick, isExpanded }) => {
   const completedWeeks = student.progress?.filter(p => p.completed).length || 0;
   const progressPercent = Math.round((completedWeeks / totalWeeks) * 100);
   const totalTime = student.time_logs?.reduce((sum, log) => sum + log.seconds_spent, 0) || 0;
-  const exercisesCompleted = new Set(student.exercise_attempts?.map(a => a.exercise_id)).size || 0;
   const quizzesPassed = student.quiz_results?.filter(q => q.passed).length || 0;
   
   const getStatusColor = () => {
@@ -62,7 +61,6 @@ const StudentRow = ({ student, onClick, isExpanded }) => {
       <td className="px-4 py-3 text-sm text-gray-600">{completedWeeks}/{totalWeeks} weeks</td>
       <td className="px-4 py-3 text-sm text-gray-600">{formatTime(totalTime)}</td>
       <td className="px-4 py-3 text-sm text-gray-600">{quizzesPassed}/{totalWeeks} passed</td>
-      <td className="px-4 py-3 text-sm text-gray-600">{exercisesCompleted} done</td>
       <td className="px-4 py-3 text-sm text-gray-500">{formatDate(student.created_at)}</td>
       <td className="px-4 py-3">
         {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
@@ -74,8 +72,6 @@ const StudentRow = ({ student, onClick, isExpanded }) => {
 const StudentDetailPanel = ({ student }) => {
   const allWeeks = getAllWeeks();
   const completedWeekIds = new Set(student.progress?.filter(p => p.completed).map(p => p.week_id) || []);
-  const exerciseAttempts = student.exercise_attempts || [];
-  const uniqueExercises = new Set(exerciseAttempts.map(a => a.exercise_id));
   const quizResults = student.quiz_results || [];
   const quizResultsMap = {};
   quizResults.forEach(q => { quizResultsMap[q.week_id] = q; });
@@ -93,7 +89,7 @@ const StudentDetailPanel = ({ student }) => {
 
   return (
     <tr>
-      <td colSpan={8} className="px-4 py-4 bg-gray-50 border-t">
+      <td colSpan={7} className="px-4 py-4 bg-gray-50 border-t">
         <div className="grid md:grid-cols-2 gap-6">
           {/* Week Progress with Quiz Status */}
           <div>
@@ -160,26 +156,6 @@ const StudentDetailPanel = ({ student }) => {
               </div>
             ) : (
               <p className="text-gray-400 text-sm">No quizzes attempted yet</p>
-            )}
-          </div>
-
-          {/* Exercise Activity */}
-          <div>
-            <h4 className="font-semibold text-gray-800 mb-3">Exercise Activity</h4>
-            {exerciseAttempts.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {Array.from(uniqueExercises).map(exId => {
-                  const attempts = exerciseAttempts.filter(a => a.exercise_id === exId);
-                  return (
-                    <div key={exId} className="px-3 py-1.5 bg-white border rounded-lg text-sm">
-                      <span className="font-medium">{exId}</span>
-                      <span className="text-gray-400 ml-2">{attempts.length} attempt{attempts.length > 1 ? 's' : ''}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-gray-400 text-sm">No exercises attempted yet</p>
             )}
           </div>
         </div>
@@ -250,13 +226,12 @@ export default function AdminDashboard() {
   ].filter(d => d.value > 0);
 
   const exportCSV = () => {
-    const headers = ['Name', 'Email', 'Progress %', 'Weeks Completed', 'Time Spent', 'Quizzes Passed', 'Exercises Done', 'Joined'];
+    const headers = ['Name', 'Email', 'Progress %', 'Weeks Completed', 'Time Spent', 'Quizzes Passed', 'Joined'];
     const rows = students.map(s => {
       const completed = s.progress?.filter(p => p.completed).length || 0;
       const time = s.time_logs?.reduce((sum, log) => sum + log.seconds_spent, 0) || 0;
       const quizzesPassed = s.quiz_results?.filter(q => q.passed).length || 0;
-      const exercises = new Set(s.exercise_attempts?.map(a => a.exercise_id)).size;
-      return [s.full_name || '', s.email, Math.round((completed / totalWeeks) * 100), completed, formatTime(time), quizzesPassed, exercises, formatDate(s.created_at)];
+      return [s.full_name || '', s.email, Math.round((completed / totalWeeks) * 100), completed, formatTime(time), quizzesPassed, formatDate(s.created_at)];
     });
     const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -400,7 +375,6 @@ export default function AdminDashboard() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Completed</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Time Spent</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Quizzes</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Exercises</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Joined</th>
                   <th className="px-4 py-3 w-8"></th>
                 </tr>
@@ -412,7 +386,7 @@ export default function AdminDashboard() {
                     {expandedStudent === student.id && <StudentDetailPanel student={student} />}
                   </React.Fragment>
                 )) : (
-                  <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-500">{searchTerm ? 'No students found' : 'No students enrolled yet'}</td></tr>
+                  <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-500">{searchTerm ? 'No students found' : 'No students enrolled yet'}</td></tr>
                 )}
               </tbody>
             </table>
